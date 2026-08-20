@@ -223,15 +223,22 @@ nav {
   </div>
 </div>
 
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
 <script>
+Kakao.init('dd1655a2f9e8a1ad5de7509e552421a7');
+
 function openPanel() {
   document.getElementById('sidePanel').style.right = '0';
   document.getElementById('overlay').style.display = 'block';
   document.body.style.overflow = 'hidden';
-  // 로그인 화면 보이고, 개인정보 화면 숨기기
-  document.getElementById('loginView').style.display = 'block';
-  document.getElementById('myPageView').style.display = 'none';
-  document.getElementById('panelTitle').textContent = '로그인';
+  const user = JSON.parse(localStorage.getItem('kakaoUser') || 'null');
+  if (user) {
+    showMyPage(user);
+  } else {
+    document.getElementById('loginView').style.display = 'block';
+    document.getElementById('myPageView').style.display = 'none';
+    document.getElementById('panelTitle').textContent = '로그인';
+  }
 }
 function closePanel() {
   document.getElementById('sidePanel').style.right = '-100%';
@@ -239,15 +246,48 @@ function closePanel() {
   document.body.style.overflow = '';
 }
 function doLogin() {
-  // 로그인 화면 숨기고, 개인정보 화면 보이기
+  Kakao.Auth.login({
+    success: function(authObj) {
+      Kakao.API.request({
+        url: '/v2/user/me',
+        success: function(res) {
+          const user = {
+            name: res.kakao_account?.profile?.nickname || '사용자',
+            email: res.kakao_account?.email || '',
+            profile_image: res.kakao_account?.profile?.profile_image_url || ''
+          };
+          localStorage.setItem('kakaoUser', JSON.stringify(user));
+          showMyPage(user);
+        },
+        fail: function(err) {
+          alert('사용자 정보를 가져오지 못했어요.');
+          console.error(err);
+        }
+      });
+    },
+    fail: function(err) {
+      alert('카카오 로그인에 실패했어요.');
+      console.error(err);
+    }
+  });
+}
+function showMyPage(user) {
   document.getElementById('loginView').style.display = 'none';
   document.getElementById('myPageView').style.display = 'block';
   document.getElementById('panelTitle').textContent = '내 정보';
+  // 이름/이메일 표시 (myPageView 안에 요소가 있으면)
+  const nameEl = document.getElementById('userName');
+  const emailEl = document.getElementById('userEmail');
+  if (nameEl) nameEl.textContent = user.name;
+  if (emailEl) emailEl.textContent = user.email;
 }
 function doLogout() {
-  document.getElementById('loginView').style.display = 'block';
-  document.getElementById('myPageView').style.display = 'none';
-  document.getElementById('panelTitle').textContent = '로그인';
+  Kakao.Auth.logout(function() {
+    localStorage.removeItem('kakaoUser');
+    document.getElementById('loginView').style.display = 'block';
+    document.getElementById('myPageView').style.display = 'none';
+    document.getElementById('panelTitle').textContent = '로그인';
+  });
 }
 function showPage(page) {
   const pages = ['mainPage','gajeongPage','inyeonPage','jaemulPage','geonganPage','seonggongPage'];

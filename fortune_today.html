@@ -46,7 +46,7 @@
       color: #1E1810; letter-spacing: 0.02em;
     }
 
-    .content { padding: 70px 1.1rem 4rem; }
+    .content { padding: 16px 1.1rem 4rem; }
 
     .date-badge {
       text-align: center;
@@ -178,6 +178,11 @@
   <span class="title">오늘의 운세</span>
 </div>
 
+<!-- 사용자 정보 배너 -->
+<div id="userBanner" style="display:none; background:#fff3f3; border-bottom:1px solid #f0e0e0; padding:0.55rem 1.1rem; margin-top:54px; font-size:0.82rem; color:#7A2525; font-family:'Noto Serif KR',serif;">
+  <span id="userBannerText"></span>
+</div>
+
 <div class="content">
   <div class="date-badge">
     <span id="todayDate"></span>
@@ -208,6 +213,20 @@
 </div>
 
 <script>
+  // 사용자 정보 불러오기
+  (function() {
+    const raw = sessionStorage.getItem('fortuneUser');
+    if (!raw) return;
+    try {
+      const u = JSON.parse(raw);
+      const genderLabel = u.gender === 'male' ? '남성' : '여성';
+      const hourLabel = u.hour ? ` · ${u.hour}시생` : '';
+      const text = `✨ ${u.name}님 (${u.year}년 ${u.month}월 ${u.day}일 · ${genderLabel}${hourLabel})`;
+      document.getElementById('userBannerText').textContent = text;
+      document.getElementById('userBanner').style.display = 'block';
+    } catch(e) {}
+  })();
+
   // 오늘 날짜
   const today = new Date();
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];

@@ -9,7 +9,6 @@
     html { min-height: 100vh; background: #FDF6E3; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { background: #FDF6E3; min-height: 100vh; }
     body {
       font-family: 'Noto Serif KR', serif;
       background: transparent;
@@ -70,12 +69,36 @@
       margin-bottom: 1rem;
     }
 
+    /* 로딩 */
+    .loading-box {
+      text-align: center;
+      padding: 2.5rem 1rem;
+    }
+    .loading-spinner {
+      width: 48px; height: 48px;
+      border: 4px solid #f0e8d8;
+      border-top: 4px solid #7A2525;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1.2rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text {
+      color: #7A2525;
+      font-size: 0.9rem;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* 운세 내용 */
     .fortune-icon {
       font-size: 2.5rem;
       text-align: center;
       margin-bottom: 0.8rem;
     }
-
     .fortune-title {
       font-size: 1.1rem;
       font-weight: 700;
@@ -83,27 +106,11 @@
       text-align: center;
       margin-bottom: 1rem;
     }
-
     .fortune-text {
       font-size: 0.9rem;
       line-height: 1.9;
       color: #444;
       white-space: pre-wrap;
-    }
-
-    .retry-btn {
-      display: block;
-      width: 100%;
-      padding: 0.8rem;
-      background: #7A2525;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 1rem;
-      font-family: 'Noto Serif KR', serif;
     }
 
     .luck-meter {
@@ -138,6 +145,30 @@
       color: #7A2525;
       white-space: nowrap;
     }
+
+    .retry-btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      background: #7A2525;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 1rem;
+      font-family: 'Noto Serif KR', serif;
+    }
+
+    /* 페이드인 */
+    .fade-in {
+      animation: fadeIn 0.8s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -152,16 +183,24 @@
     <span id="todayDate"></span>
   </div>
 
-  <div class="fortune-card">
-    <div class="fortune-icon" id="fortuneIcon">🔮</div>
-    <div class="fortune-title" id="fortuneTitle"></div>
-    <div class="fortune-text" id="fortuneText"></div>
-    <div class="luck-meter">
-      <span class="luck-label">오늘의 운</span>
-      <div class="luck-bar-bg">
-        <div class="luck-bar" id="luckBar" style="width:0%"></div>
+  <div class="fortune-card" id="fortuneCard">
+    <!-- 로딩 -->
+    <div class="loading-box" id="loadingBox">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">오늘의 운세를 살펴보는 중...</div>
+    </div>
+    <!-- 운세 내용 -->
+    <div id="fortuneContent" style="display:none;">
+      <div class="fortune-icon" id="fortuneIcon">🔮</div>
+      <div class="fortune-title" id="fortuneTitle"></div>
+      <div class="fortune-text" id="fortuneText"></div>
+      <div class="luck-meter">
+        <span class="luck-label">오늘의 운</span>
+        <div class="luck-bar-bg">
+          <div class="luck-bar" id="luckBar" style="width:0%"></div>
+        </div>
+        <span class="luck-score" id="luckScore"></span>
       </div>
-      <span class="luck-score" id="luckScore"></span>
     </div>
   </div>
 
@@ -175,7 +214,7 @@
   const dateStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 (${weekdays[today.getDay()]})`;
   document.getElementById('todayDate').textContent = dateStr;
 
-  // 날짜 기반 시드 난수 (같은 날은 같은 운세)
+  // 날짜 기반 시드 난수
   const seed = today.getFullYear() * 10000 + (today.getMonth()+1) * 100 + today.getDate();
   function seededRandom(s) {
     let x = Math.sin(s) * 10000;
@@ -249,15 +288,24 @@
   // 날짜 기반으로 운세 선택
   const idx = Math.floor(seededRandom(seed) * fortunes.length);
   const fortune = fortunes[idx];
-  const luckScore = fortune.luckScore + Math.floor(seededRandom(seed + 1) * 10) - 5;
+  const luckScore = Math.min(95, Math.max(40, fortune.luckScore + Math.floor(seededRandom(seed + 1) * 10) - 5));
 
-  document.getElementById('fortuneIcon').textContent = fortune.icon;
-  document.getElementById('fortuneTitle').textContent = fortune.title;
-  document.getElementById('fortuneText').textContent = fortune.fortune;
-  document.getElementById('luckScore').textContent = luckScore + '점';
+  // 로딩 1.5초 후 운세 표시
   setTimeout(() => {
-    document.getElementById('luckBar').style.width = luckScore + '%';
-  }, 100);
+    document.getElementById('loadingBox').style.display = 'none';
+    const content = document.getElementById('fortuneContent');
+    content.style.display = 'block';
+    content.classList.add('fade-in');
+
+    document.getElementById('fortuneIcon').textContent = fortune.icon;
+    document.getElementById('fortuneTitle').textContent = fortune.title;
+    document.getElementById('fortuneText').textContent = fortune.fortune;
+    document.getElementById('luckScore').textContent = luckScore + '점';
+
+    setTimeout(() => {
+      document.getElementById('luckBar').style.width = luckScore + '%';
+    }, 200);
+  }, 1500);
 </script>
 </body>
 </html>

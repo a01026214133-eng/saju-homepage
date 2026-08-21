@@ -1,0 +1,8 @@
+{
+  "name": "oboksindang-api",
+  "version": "1.0.0",
+  "description": "오복신당 API 서버",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  }
+}

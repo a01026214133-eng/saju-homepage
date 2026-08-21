@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>오늘의 운세 - 오복신당</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html { min-height: 100vh; background: #FDF6E3; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      background: #FDF6E3;
+      min-height: 100vh;
+    }
+    body {
+      font-family: 'Noto Serif KR', serif;
+      background: transparent;
+      min-height: 100vh;
+      max-width: 480px;
+      margin: 0 auto;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    
+    .content, .header {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      position: fixed;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100%; max-width: 480px;
+      background: #fff;
+      padding: 0 1.1rem;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 1px 0 #e8e2d9;
+    }
+    .header .back-btn {
+      background: none; border: none;
+      font-size: 1.3rem; color: #1E1810;
+      cursor: pointer; padding: 0;
+      margin-right: 0.8rem;
+      line-height: 1;
+    }
+    .header .title {
+      font-size: 1rem; font-weight: 700;
+      color: #1E1810; letter-spacing: 0.02em;
+    }
+
+    .content {
+      padding: 70px 1.1rem 4rem;
+    }
+
+    .date-badge {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .date-badge span {
+      background: #7A2525;
+      color: #fff;
+      font-size: 0.82rem;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .fortune-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      margin-bottom: 1rem;
+    }
+
+    .fortune-icon {
+      font-size: 2.5rem;
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .fortune-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1E1810;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .fortune-text {
+      font-size: 0.9rem;
+      line-height: 1.9;
+      color: #444;
+      white-space: pre-wrap;
+    }
+
+    .loading-box {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 4px solid #f0e8d8;
+      border-top: 4px solid #7A2525;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text {
+      color: #7A2525;
+      font-size: 0.9rem;
+    }
+
+    .retry-btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      background: #7A2525;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 1rem;
+      font-family: 'Noto Serif KR', serif;
+    }
+
+    .luck-meter {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #f0e8d8;
+    }
+    .luck-label {
+      font-size: 0.8rem;
+      color: #888;
+      white-space: nowrap;
+    }
+    .luck-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: #f0e8d8;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .luck-bar {
+      height: 100%;
+      background: #7A2525;
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+    .luck-score {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #7A2525;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+<div class="header">
+  <button class="back-btn" onclick="history.back()">←</button>
+  <span class="title">오늘의 운세</span>
+</div>
+
+<div class="content">
+  <div class="date-badge">
+    <span id="todayDate"></span>
+  </div>
+
+  <div class="fortune-card" id="fortuneCard">
+    <div class="loading-box" id="loadingBox">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">오늘의 운세를 불러오는 중...</div>
+    </div>
+    <div id="fortuneContent" style="display:none;">
+      <div class="fortune-icon" id="fortuneIcon">🔮</div>
+      <div class="fortune-title" id="fortuneTitle"></div>
+      <div class="fortune-text" id="fortuneText"></div>
+      <div class="luck-meter">
+        <span class="luck-label">오늘의 운</span>
+        <div class="luck-bar-bg">
+          <div class="luck-bar" id="luckBar" style="width:0%"></div>
+        </div>
+        <span class="luck-score" id="luckScore"></span>
+      </div>
+    </div>
+  </div>
+
+  <button class="retry-btn" onclick="location.href='index.html'">← 돌아가기</button>
+</div>
+
+<script>
+  // 오늘 날짜 표시
+  const today = new Date();
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const dateStr = `${today.getFullYear()}년 ${today.getMonth()+1}월 ${today.getDate()}일 (${weekdays[today.getDay()]})`;
+  document.getElementById('todayDate').textContent = dateStr;
+
+  async function getFortune() {
+    document.getElementById('loadingBox').style.display = 'block';
+    document.getElementById('fortuneContent').style.display = 'none';
+
+    const prompt = `오늘(${dateStr}) 오늘의 운세를 작성해주세요.
+
+다음 형식으로 JSON으로만 응답해주세요 (다른 텍스트 없이):
+{
+  "icon": "운세 관련 이모지 1개",
+  "title": "오늘의 운세 제목 (10자 이내)",
+  "fortune": "오늘의 전체적인 운세 내용 (3~4문장, 구체적이고 희망적으로)",
+  "luckScore": 오늘의 운 점수 (40~95 사이 숫자)
+}`;
+
+    // ⚠️ 아래 URL을 Vercel 배포 후 발급된 주소로 교체하세요
+    // 예: https://oboksindang-api.vercel.app/api/fortune
+    const API_URL = "https://saju-homepage-beta.vercel.app/api/fortune";
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt })
+      });
+
+      if (!response.ok) {
+        throw new Error(`서버 오류: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const text = data.content[0].text.trim().replace(/```json|```/g, '');
+      const result = JSON.parse(text);
+
+      document.getElementById('fortuneIcon').textContent = result.icon || '🔮';
+      document.getElementById('fortuneTitle').textContent = result.title;
+      document.getElementById('fortuneText').textContent = result.fortune;
+
+      const score = result.luckScore || 70;
+      document.getElementById('luckScore').textContent = score + '점';
+      setTimeout(() => {
+        document.getElementById('luckBar').style.width = score + '%';
+      }, 100);
+
+      document.getElementById('loadingBox').style.display = 'none';
+      document.getElementById('fortuneContent').style.display = 'block';
+
+    } catch(e) {
+      console.error('운세 오류:', e);
+      document.getElementById('loadingBox').innerHTML = `
+        <div style="color:#c00; font-size:0.9rem; margin-bottom:1rem;">
+          운세를 불러오지 못했습니다.<br>잠시 후 다시 시도해주세요.
+        </div>
+        <button onclick="getFortune()" style="
+          padding:0.6rem 1.5rem; background:#7A2525; color:#fff;
+          border:none; border-radius:8px; font-size:0.9rem;
+          cursor:pointer; font-family:'Noto Serif KR',serif;
+        ">다시 시도</button>
+      `;
+    }
+  }
+
+  getFortune();
+</script>
+</body>
+</html>

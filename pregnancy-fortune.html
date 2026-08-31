@@ -731,20 +731,6 @@ footer{
   </div>
 
 
-  <div style="text-align:center; padding: 24px 0 16px;">
-    <a href="index.html" style="
-      display: inline-block;
-      background: #2a1f14;
-      color: #fff;
-      font-family: 'Noto Serif KR', serif;
-      font-size: 15px;
-      letter-spacing: 0.06em;
-      padding: 14px 32px;
-      border-radius: 50px;
-      text-decoration: none;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-    ">☘ 오복신당으로 돌아가기</a>
-  </div>
   <footer>✦ 오복할머니 임신운 ✦</footer>
 </div>
 
@@ -1007,8 +993,8 @@ function getGrandmaWords(my, sp, hasKids){
   return words[idx];
 }
 
-/* ─── 제출 (계산 방식) ─── */
-function submitForm(){
+/* ─── 제출 (Claude API 연동) ─── */
+async function submitForm(){
   const myDate=document.getElementById('my-date').value;
   const myHour=document.getElementById('my-hour').value;
   const spDate=document.getElementById('sp-date').value;
@@ -1036,32 +1022,33 @@ function submitForm(){
   document.getElementById('result-cards').innerHTML='';
   document.getElementById('restart-btn').style.display='none';
 
-  // 약간의 딜레이로 로딩 연출
-  setTimeout(() => {
-    try{
-      const my = parseSaju(myDate, myHour);
-      const sp = parseSaju(spDate, spHour);
-      const childrenSaju = children.map(c => parseSaju(c.date, c.hour));
+  try{
+    const res = await fetch('/api/fortune', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        my:  { date: myDate, hour: myHour },
+        sp:  { date: spDate, hour: spHour },
+        children,
+        hasChildren
+      })
+    });
 
-      const result = {
-        timing:        calcTiming(my, sp, childrenSaju, hasChildren),
-        family_flow:   calcFamilyFlow(my, sp, hasChildren, children.length),
-        connection:    calcConnection(my, sp),
-        action:        calcAction(my, sp),
-        grandma_words: getGrandmaWords(my, sp, hasChildren),
-      };
-      renderCards(result);
-    }catch(e){
-      document.getElementById('result-cards').innerHTML=
-        `<div class="err-box visible">사주 계산 중 오류가 발생했어요. 생년월일을 다시 확인해 주세요.<br><small>${e.message}</small></div>`;
-    }finally{
-      document.getElementById('loading').classList.remove('visible');
-      document.getElementById('restart-btn').style.display='block';
-    }
-  }, 2000);
+    if(!res.ok) throw new Error(`서버 오류 (${res.status})`);
+    const result = await res.json();
+    if(result.error) throw new Error(result.error);
+    renderCards(result);
+
+  }catch(e){
+    document.getElementById('result-cards').innerHTML=
+      `<div class="err-box visible">오류가 발생했어요. 잠시 후 다시 시도해 주세요.<br><small>${e.message}</small></div>`;
+  }finally{
+    document.getElementById('loading').classList.remove('visible');
+    document.getElementById('restart-btn').style.display='block';
+  }
 }
 
-function buildPrompt(){} // 더 이상 사용 안 함
+function buildPrompt(){} // 사용 안 함
 
 function renderCards(data){
   const secs=[

@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
-    "@auth/prisma-adapter": "^2.11.3",
-    "mysql2": "^3.24.2",
-    "next-auth": "^4.24.15",
-    "prisma": "^8.0.0-rc.12"
+    "@anthropic-ai/sdk": "^0.39.0"
   }
 }

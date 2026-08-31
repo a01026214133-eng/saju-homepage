@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>충전하기 — 오복신당</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Serif KR', serif;
+      background-color: #EDE9DF;
+      background-image:
+        repeating-linear-gradient(45deg, rgba(180,160,130,0.07) 0px, rgba(180,160,130,0.07) 1px, transparent 1px, transparent 20px),
+        repeating-linear-gradient(-45deg, rgba(180,160,130,0.07) 0px, rgba(180,160,130,0.07) 1px, transparent 1px, transparent 20px);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 헤더 */
+    .header {
+      background: #1a1209;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header button {
+      background: none;
+      border: none;
+      color: #c8b89a;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+    .header h1 {
+      font-size: 17px;
+      font-weight: 400;
+      color: #c8b89a;
+      letter-spacing: 0.15em;
+    }
+
+    /* 현재 보유 포인트 */
+    .balance-card {
+      background: linear-gradient(135deg, #2a1f14 0%, #1a1209 100%);
+      margin: 20px 16px;
+      border-radius: 12px;
+      padding: 24px 20px;
+      color: #fff;
+      text-align: center;
+    }
+    .balance-label {
+      font-size: 12px;
+      color: #c8b89a;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .balance-amount {
+      font-size: 28px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: 0.05em;
+    }
+    .balance-amount span {
+      font-size: 16px;
+      color: #c8b89a;
+      margin-left: 4px;
+    }
+
+    /* 섹션 제목 */
+    .section-title {
+      font-size: 13px;
+      color: #7a6a5a;
+      letter-spacing: 0.08em;
+      padding: 0 16px;
+      margin-bottom: 12px;
+    }
+
+    /* 충전 금액 선택 */
+    .amount-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 16px;
+      margin-bottom: 28px;
+    }
+    .amount-card {
+      border: 1.5px solid #e0d8cc;
+      border-radius: 10px;
+      padding: 18px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      background: #fff;
+      position: relative;
+    }
+    .amount-card:hover {
+      border-color: #8B1520;
+    }
+    .amount-card.selected {
+      border-color: #8B1520;
+      background: #fdf5f5;
+    }
+    .amount-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 12px;
+      color: #8B1520;
+    }
+    .amount-badge {
+      display: inline-block;
+      font-size: 10px;
+      color: #8B1520;
+      background: #fdecea;
+      border-radius: 20px;
+      padding: 2px 8px;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+    .amount-value {
+      font-size: 20px;
+      font-weight: 500;
+      color: #2a1f14;
+      margin-bottom: 4px;
+    }
+    .amount-point {
+      font-size: 11px;
+      color: #9a8a7a;
+    }
+
+    /* 결제 수단 */
+    .pay-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 0 16px;
+      margin-bottom: 28px;
+    }
+    .pay-item {
+      border: 1.5px solid #e0d8cc;
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      background: #fff;
+    }
+    .pay-item:hover { border-color: #8B1520; }
+    .pay-item.selected {
+      border-color: #8B1520;
+      background: #fdf5f5;
+    }
+    .pay-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .pay-icon.kakao { background: #FEE500; }
+    .pay-icon.toss { background: #0064FF; }
+    .pay-name {
+      font-size: 14px;
+      color: #2a1f14;
+      flex: 1;
+    }
+    .pay-radio {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.18s;
+    }
+    .pay-item.selected .pay-radio {
+      border-color: #8B1520;
+      background: #8B1520;
+    }
+    .pay-item.selected .pay-radio::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    /* 충전 요약 */
+    .summary-box {
+      margin: 0 16px 24px;
+      background: #f8f5f0;
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #7a6a5a;
+      margin-bottom: 8px;
+    }
+    .summary-row:last-child {
+      margin-bottom: 0;
+      padding-top: 10px;
+      border-top: 1px solid #e0d8cc;
+      font-size: 15px;
+      color: #2a1f14;
+      font-weight: 500;
+    }
+
+    /* 충전 버튼 */
+    .charge-btn {
+      margin: 0 16px 32px;
+      width: calc(100% - 32px);
+      padding: 15px;
+      background: #8B1520;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: 'Noto Serif KR', serif;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .charge-btn:hover { background: #a01a28; }
+    .charge-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* 안내 문구 */
+    .notice {
+      margin: 0 16px 32px;
+      font-size: 11px;
+      color: #aaa;
+      line-height: 1.8;
+    }
+    .notice p::before {
+      content: '· ';
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 헤더 -->
+  <div class="header">
+    <button onclick="history.back()">&#8592;</button>
+    <h1>충전하기</h1>
+  </div>
+
+  <!-- 현재 보유 포인트 -->
+  <div class="balance-card">
+    <div class="balance-label">현재 보유 포인트</div>
+    <div class="balance-amount">0<span>P</span></div>
+  </div>
+
+  <!-- 충전 금액 선택 -->
+  <div class="section-title">충전 금액 선택</div>
+  <div class="amount-grid">
+    <div class="amount-card" onclick="selectAmount(this, 3000)">
+      <div class="amount-value">3,000원</div>
+      <div class="amount-point">3,000 P 충전</div>
+    </div>
+    <div class="amount-card" onclick="selectAmount(this, 5000)">
+      <div class="amount-badge">인기</div>
+      <div class="amount-value">5,000원</div>
+      <div class="amount-point">5,000 P 충전</div>
+    </div>
+    <div class="amount-card" onclick="selectAmount(this, 10000)">
+      <div class="amount-badge">추천</div>
+      <div class="amount-value">10,000원</div>
+      <div class="amount-point">10,000 P 충전</div>
+    </div>
+    <div class="amount-card" onclick="selectAmount(this, 30000)">
+      <div class="amount-value">30,000원</div>
+      <div class="amount-point">30,000 P 충전</div>
+    </div>
+  </div>
+
+  <!-- 결제 수단 선택 -->
+  <div class="section-title">결제 수단</div>
+  <div class="pay-list">
+    <div class="pay-item" onclick="selectPay(this, 'kakao')">
+      <div class="pay-icon kakao">💛</div>
+      <div class="pay-name">카카오페이</div>
+      <div class="pay-radio"></div>
+    </div>
+    <div class="pay-item" onclick="selectPay(this, 'toss')">
+      <div class="pay-icon toss">💙</div>
+      <div class="pay-name">토스페이</div>
+      <div class="pay-radio"></div>
+    </div>
+  </div>
+
+  <!-- 충전 요약 -->
+  <div class="summary-box">
+    <div class="summary-row">
+      <span>충전 금액</span>
+      <span id="summaryAmount">-</span>
+    </div>
+    <div class="summary-row">
+      <span>결제 수단</span>
+      <span id="summaryPay">-</span>
+    </div>
+    <div class="summary-row">
+      <span>최종 결제금액</span>
+      <span id="summaryTotal">-</span>
+    </div>
+  </div>
+
+  <!-- 충전 버튼 -->
+  <button class="charge-btn" id="chargeBtn" disabled onclick="charge()">충전하기</button>
+
+  <!-- 안내 문구 -->
+  <div class="notice">
+    <p>충전된 포인트는 환불이 불가합니다.</p>
+    <p>포인트는 오복신당 상담 서비스에만 사용 가능합니다.</p>
+    <p>문의사항은 고객센터 070-8027-4898로 연락해 주세요.</p>
+  </div>
+
+</div>
+
+<script>
+  let selectedAmount = 0;
+  let selectedPay = '';
+
+  function selectAmount(el, amount) {
+    document.querySelectorAll('.amount-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedAmount = amount;
+    updateSummary();
+  }
+
+  function selectPay(el, pay) {
+    document.querySelectorAll('.pay-item').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPay = pay;
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const amountEl = document.getElementById('summaryAmount');
+    const payEl = document.getElementById('summaryPay');
+    const totalEl = document.getElementById('summaryTotal');
+    const btn = document.getElementById('chargeBtn');
+
+    amountEl.textContent = selectedAmount ? selectedAmount.toLocaleString() + '원' : '-';
+    payEl.textContent = selectedPay === 'kakao' ? '카카오페이' : selectedPay === 'toss' ? '토스페이' : '-';
+    totalEl.textContent = selectedAmount ? selectedAmount.toLocaleString() + '원' : '-';
+
+    btn.disabled = !(selectedAmount && selectedPay);
+  }
+
+  function charge() {
+    alert(`${selectedAmount.toLocaleString()}원 결제를 진행합니다.\n(결제 모듈 연동 후 실제 결제가 가능합니다.)`);
+  }
+</script>
+</body>
+</html>

@@ -1021,7 +1021,7 @@ function startLoadMsg() {
 }
 function stopLoadMsg() { clearInterval(loadTimer); }
 
-function submitForm() {
+async function submitForm() {
   const myBirth=document.getElementById('myBirth').value;
   const spBirth=document.getElementById('spBirth').value;
   const err=document.getElementById('formErr');
@@ -1040,19 +1040,23 @@ function submitForm() {
     if(birth) children.push({birth,hour,gender});
   });
   showLoading(); startLoadMsg();
-  // 직접 계산
-  setTimeout(() => {
+  try {
+    const res = await fetch('/api/jashik', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ myBirth, myHour, myGender, spBirth, spHour, spGender, children })
+    });
     stopLoadMsg();
-    try {
-      const result = analyzeSaju(myBirth, myHour, myGender, spBirth, spHour, spGender, children);
-      renderResult(result, children.length>0);
-      showResult();
-    } catch(e) {
-      stopLoadMsg();
-      renderError(e.message);
-      showResult();
-    }
-  }, 1500);
+    if(!res.ok) throw new Error('서버 오류 ('+res.status+')');
+    const result = await res.json();
+    if(result.error) throw new Error(result.error);
+    renderResult(result, children.length>0);
+    showResult();
+  } catch(e) {
+    stopLoadMsg();
+    renderError(e.message);
+    showResult();
+  }
 }
 
 const CARDS=[

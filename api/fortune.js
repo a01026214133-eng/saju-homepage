@@ -1,23 +1,110 @@
 const Anthropic = require('@anthropic-ai/sdk');
 
+// ─── 사주 계산 엔진 ───
+const 천간오행  = [0,0,1,1,2,2,3,3,4,4];
+const 지지오행  = [4,2,0,0,2,1,1,2,3,3,2,4];
+const 천간음양  = [0,1,0,1,0,1,0,1,0,1];
+const 오행명    = ['목','화','토','금','수'];
+const 천간명    = ['갑','을','병','정','무','기','경','신','임','계'];
+const 지지명    = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+
+function getGanZhi(year, month, day) {
+  const yG = (year - 4) % 10;
+  const yZ = (year - 4) % 12;
+  const mBase = (year - 1900) * 12 + month;
+  const mG = (mBase + 2) % 10;
+  const mZ = (month + 1) % 12;
+  const a  = Math.floor((14 - month) / 12);
+  const y2 = year + 4800 - a;
+  const m2 = month + 12 * a - 3;
+  const jd = day + Math.floor((153 * m2 + 2) / 5)
+           + 365 * y2 + Math.floor(y2 / 4)
+           - Math.floor(y2 / 100) + Math.floor(y2 / 400) - 32045;
+  const dG = (jd + 4) % 10;
+  const dZ = (jd + 4) % 12;
+  return {
+    year:  { gan: ((yG % 10) + 10) % 10, zhi: ((yZ % 12) + 12) % 12 },
+    month: { gan: ((mG % 10) + 10) % 10, zhi: ((mZ % 12) + 12) % 12 },
+    day:   { gan: ((dG % 10) + 10) % 10, zhi: ((dZ % 12) + 12) % 12 },
+  };
+}
+
+function getHourZhi(hourStr) {
+  const map = {
+    '자시(00:00~00:59)':0,'축시(01:00~02:59)':1,'인시(03:00~04:59)':2,
+    '묘시(05:00~06:59)':3,'진시(07:00~08:59)':4,'사시(09:00~10:59)':5,
+    '오시(11:00~12:59)':6,'미시(13:00~14:59)':7,'신시(15:00~16:59)':8,
+    '유시(17:00~18:59)':9,'술시(19:00~20:59)':10,'해시(21:00~22:59)':11,
+    '모름': -1,
+  };
+  return map[hourStr] ?? -1;
+}
+
+function parseSaju(dateStr, hourStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const gz  = getGanZhi(y, m, d);
+  const hZ  = getHourZhi(hourStr);
+  const dayGanOh   = 천간오행[gz.day.gan];
+  const 생하는오행 = (dayGanOh + 1) % 5;
+  let childStar = 0;
+  [gz.year, gz.month, gz.day].forEach(p => {
+    if (천간오행[p.gan] === 생하는오행) childStar++;
+    if (지지오행[p.zhi] === 생하는오행) childStar++;
+  });
+  if (hZ >= 0 && 지지오행[hZ] === 생하는오행) childStar++;
+  return { gz, hZ, dayGanOh, 생하는오행, childStar, year: y, month: m, day: d };
+}
+
+function sajuSummary(saju, label) {
+  const { gz, hZ } = saju;
+  const 연주 = `${천간명[gz.year.gan]}${지지명[gz.year.zhi]}년`;
+  const 월주 = `${천간명[gz.month.gan]}${지지명[gz.month.zhi]}월`;
+  const 일주 = `${천간명[gz.day.gan]}${지지명[gz.day.zhi]}일`;
+  const 시주 = hZ >= 0 ? `${지지명[hZ]}시` : '시간 미상';
+  return `${label}: ${연주} ${월주} ${일주} ${시주} | 일간 ${오행명[saju.dayGanOh]}, 자녀성 ${saju.childStar}개`;
+}
+
+function getGoodYears(saju) {
+  const curYear = new Date().getFullYear();
+  const 오행지지 = [[2,3],[5,6],[0,1,4,7],[8,9],[10,11]];
+  const 길지지 = 오행지지[saju.생하는오행];
+  const result = [];
+  for (let y = curYear; y <= curYear + 3; y++) {
+    const yZ = ((y - 4) % 12 + 12) % 12;
+    if (길지지.includes(yZ)) result.push(y);
+  }
+  return result;
+}
+
+// ─── API 핸들러 ───
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
   const { my, sp, children, hasChildren } = req.body;
 
-  const childrenInfo = hasChildren && children.length > 0
-    ? `[기존 자녀 정보]\n${children.map((c, i) => `- ${i+1}번째 자녀: ${c.date} ${c.hour}`).join('\n')}`
+  // 사주 계산
+  const mySaju = parseSaju(my.date, my.hour);
+  const spSaju = parseSaju(sp.date, sp.hour);
+  const goodYears = getGoodYears(mySaju);
+  const curYear = new Date().getFullYear();
+
+  // 자녀 정보
+  const childrenInfo = hasChildren && children && children.length > 0
+    ? `[기존 자녀]\n${children.map((c, i) => `- ${i+1}번째: ${c.date} ${c.hour}`).join('\n')}`
     : '[기존 자녀]: 없음';
 
   const prompt = `당신은 사주명리학에 정통한 "오복할머니"입니다. 따뜻하고 정겨운 할머니 말투로 임신운을 풀어주세요. 어렵고 딱딱한 표현보다 쉽고 포근한 말투를 써주세요.
 
-[본인 사주 정보]
-- 생년월일: ${my.date}
-- 태어난 시간: ${my.hour}
+[부부 사주]
+${sajuSummary(mySaju, '본인(여성)')}
+${sajuSummary(spSaju, '배우자(남성)')}
 
-[배우자 사주 정보]
-- 생년월일: ${sp.date}
-- 태어난 시간: ${sp.hour}
+[사주 분석 데이터]
+- 본인 자녀성 오행: ${오행명[mySaju.생하는오행]} (자녀성 ${mySaju.childStar}개)
+- 배우자 자녀성 오행: ${오행명[spSaju.생하는오행]} (자녀성 ${spSaju.childStar}개)
+- 부부 자녀성 합산: ${mySaju.childStar + spSaju.childStar}개
+- 올해(${curYear}) 임신운 길한 해: ${goodYears.includes(curYear) ? '예' : '아니오'}
+- 향후 임신운 좋은 해: ${goodYears.length > 0 ? goodYears.join(', ') + '년' : '단기 내 없음, 내면 준비 시기'}
 
 ${childrenInfo}
 
@@ -25,10 +112,10 @@ ${childrenInfo}
 반드시 아래 JSON 형식으로만 응답하세요. 마크다운 코드블록 없이 순수 JSON만 출력하세요.
 
 {
-  "timing": "임신운이 강해지는 시기 (구체적인 연도와 계절을 포함해서 희망적으로)",
+  "timing": "임신운이 강해지는 시기 (위 분석 데이터의 구체적인 연도·계절을 반영해서 희망적으로)",
   "family_flow": "현재 가족의 전체적인 기운 흐름 (따뜻하고 긍정적으로)",
   "connection": "새로운 아이와의 인연 흐름 (아이의 기질과 인연이 오는 방향)",
-  "action": "임신운을 맞이하기 위한 구체적인 행동 4가지 (줄바꿈으로 구분)",
+  "action": "임신운을 높이기 위한 구체적인 행동 4가지 (줄바꿈으로 구분, 자녀성 오행에 맞게)",
   "grandma_words": "오복할머니가 직접 건네는 한마디 (할머니 말투로, 따뜻하고 위로가 되게)"
 }`;
 
@@ -38,10 +125,10 @@ ${childrenInfo}
     const response = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 1500,
-      messages: [{ role: 'user', content: prompt }]
+      messages: [{ role: 'user', content: prompt }],
     });
 
-    const text = response.content[0].text;
+    const text  = response.content[0].text;
     const clean = text.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
 

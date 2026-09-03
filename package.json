@@ -1,6 +1,7 @@
 {
-  "name": "saju-homepage",
+  "name": "pregnancy-fortune",
   "version": "1.0.0",
+  "description": "오복할머니 임신운 사주 풀이",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0"
   }

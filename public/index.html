@@ -281,12 +281,8 @@
     .content-area {
       position: relative;
       z-index: 2;
-      min-height: calc(100vh - 100px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 40px;
+      min-height: 0;
+      padding: 0;
     }
 
     /* 슬라이더 */
@@ -366,7 +362,12 @@
     /* 카드뉴스 */
     .cardnews-wrap { display: none; max-width: 430px; margin: 100px auto 0; padding: 0 16px 40px; position: relative; z-index: 2; }
     .cardnews-wrap.active { display: block; }
-    .card-item { background: #fff; border-radius: 16px; margin-bottom: 48px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.09); }
+    .cardnews-header { display: flex; align-items: center; padding: 14px 0 18px; margin-bottom: 4px; }
+    .cardnews-back { background: none; border: none; cursor: pointer; padding: 4px 8px 4px 0; display: flex; align-items: center; color: #5a4232; font-size: 20px; }
+    .cardnews-title { font-family: 'Noto Serif KR', serif; font-size: 16px; color: #3a2e22; font-weight: 400; letter-spacing: 0.04em; }
+    .card-item { background: #fff; border-radius: 16px; margin-bottom: 48px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.09); cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .card-item:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+    .card-item:active { transform: translateY(0); }
     .card-img { width: 100%; height: 220px; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; font-family: 'Noto Serif KR', serif; }
     .card-body { padding: 16px 18px 18px; }
     .card-tag { display: inline-block; background: #f5ede0; color: #8B1520; font-size: 10px; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
@@ -375,6 +376,168 @@
  * { box-sizing: border-box; margin: 0; padding: 0; }
 
  
+
+    /* ── 추천 / 인연북 섹션 ── */
+    .rec-section {
+      padding: 48px 0 0;
+      max-width: 430px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .rec-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .rec-section-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #1a1a1a;
+      font-family: 'Noto Serif KR', serif;
+    }
+    .rec-section-more {
+      font-size: 12px;
+      color: #999;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .rec-section-more::after { content: '›'; font-size: 15px; line-height: 1; margin-top: -1px; }
+    .rec-track {
+      display: flex;
+      gap: 12px;
+      padding: 4px 24px 12px;
+      transition: transform 0.32s cubic-bezier(.25,.46,.45,.94);
+      will-change: transform;
+    }
+    .recommend-card {
+      flex: 0 0 calc(50% - 6px);
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 1px 6px rgba(0,0,0,.06);
+      cursor: pointer;
+      transition: transform 0.18s ease;
+    }
+    .recommend-card:active { transform: scale(0.97); }
+    .recommend-card .thumb {
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: #f0ece5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+    .rec-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .rec-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #ddd;
+      transition: background .22s, width .22s;
+      cursor: pointer;
+    }
+    .rec-dot.active { background: #c08060; width: 16px; border-radius: 3px; }
+    .recommend-card .rec-info { padding: 10px 12px 13px; }
+    .recommend-card .rec-tag { font-size: 10px; color: #b89a7a; margin-bottom: 3px; }
+    .recommend-card .rec-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; line-height: 1.35; font-family: 'Noto Serif KR', serif; }
+    .recommend-card .rec-sub { font-size: 11px; color: #aaa; }
+    .yeon-section {
+      padding: 40px 0 56px;
+      max-width: 430px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .yeon-section .rec-section-header { padding: 0 24px; margin-bottom: 16px; }
+    .slider-outer {
+      overflow: hidden;
+      cursor: grab;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .slider-outer:active { cursor: grabbing; }
+    .yeon-track {
+      display: flex;
+      gap: 12px;
+      padding: 4px 24px 12px;
+      transition: transform 0.32s cubic-bezier(.25,.46,.45,.94);
+      will-change: transform;
+    }
+    .yeon-card {
+      flex: 0 0 calc(50% - 6px);
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      transition: transform 0.18s ease;
+      cursor: pointer;
+    }
+    .yeon-card:active { transform: scale(0.97); }
+    .yeon-card .card-thumb {
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: linear-gradient(140deg, #f5efe6 0%, #e8ddd1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      position: relative;
+      overflow: hidden;
+    }
+    .yeon-card .card-thumb .deco {
+      position: absolute;
+      bottom: -8px; right: -8px;
+      font-size: 60px;
+      opacity: .12;
+    }
+    .yeon-card .yeon-body { padding: 12px 14px 15px; }
+    .yeon-card .yeon-badge {
+      display: inline-block;
+      font-size: 9.5px;
+      background: #f3ede4;
+      color: #a07d5a;
+      border-radius: 20px;
+      padding: 2px 8px;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+    .yeon-card .yeon-title { font-size: 13.5px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; color: #1c1c1c; font-family: 'Noto Serif KR', serif; }
+    .yeon-card .yeon-desc { font-size: 11px; color: #b0a090; line-height: 1.5; }
+    .yeon-card .yeon-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #f3ede4;
+    }
+    .yeon-card .yeon-price { font-size: 12px; font-weight: 700; color: #c08060; }
+    .yeon-card .yeon-heart { font-size: 14px; color: #ddd; cursor: pointer; transition: color .15s; }
+    .yeon-card .yeon-heart.liked { color: #e87575; }
+    .yeon-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .yeon-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: #ddd;
+      transition: background .22s, width .22s;
+      cursor: pointer;
+    }
+    .yeon-dot.active { background: #c08060; width: 16px; border-radius: 3px; }
   </style>
   
 </head>
@@ -395,10 +558,10 @@
   </header>
 
   <!-- 메뉴 그리드 -->
-  <section class="menu-section">
+  <section class="menu-section" id="menuSection">
     <div class="menu-grid">
       <a class="menu-item" href="javascript:void(0)"><img src="images/image_03.png" alt="사주" style="cursor:pointer;" onclick="openPage('사주')"></a>
-      <a class="menu-item" href="javascript:void(0)"><img src="images/image_04.png" alt="인연복" style="cursor:pointer;" onclick="openPage('인인복')"></a>
+      <a class="menu-item" href="javascript:void(0)"><img src="images/image_04.png" alt="인연복" style="cursor:pointer;" onclick="openPage('인연복')"></a>
       <a class="menu-item" href="javascript:void(0)"><img src="images/image_05.png" alt="재물복" style="cursor:pointer;" onclick="openPage('재물복')"></a>
       <a class="menu-item" href="javascript:void(0)"><img src="images/image_06.png" alt="가정복" style="cursor:pointer;" onclick="openPage('가정복')"></a>
       <a class="menu-item" href="javascript:void(0)"><img src="images/image_07.png" alt="성공복" style="cursor:pointer;" onclick="openPage('성공복')"></a>
@@ -408,7 +571,7 @@
 
  
   <!-- 복물 배너 이미지 -->
-  <div style="width:100%; max-width:430px; margin:0 auto;">
+  <div id="mainBanner" style="width:100%; max-width:430px; margin:0 auto;">
      <a href="https://oboksindang.com/" target="_blank" style="display:block;">
     <img src="images/image_09.png" alt="내 사주에 부족한 오복, 복물로 채워보세요" style="width:100%; display:block;">
       </a>  
@@ -469,14 +632,435 @@
         </div>
       </div>
     </div>
-     <div class="saju-section">
-    <div class="saju-header">
-   
+  </section>
+
+  <!-- 오늘의 추천 사주 섹션 -->
+  <div class="rec-section" id="recSection">
+    <div class="rec-section-header">
+      <span class="rec-section-title">오늘의 추천 사주</span>
+    </div>
+    <div class="slider-outer" id="recOuter">
+      <div class="rec-track" id="recTrack">
+        <div class="recommend-card">
+          <div class="thumb">🔮</div>
+          <div class="rec-info">
+            <div class="rec-tag">오늘의 운세</div>
+            <div class="rec-name">2025년 오늘의 총운</div>
+            <div class="rec-sub">무료 · 바로보기</div>
+          </div>
+        </div>
+        <div class="recommend-card">
+          <div class="thumb">💌</div>
+          <div class="rec-info">
+            <div class="rec-tag">궁합</div>
+            <div class="rec-name">연인 사주 궁합 풀이</div>
+            <div class="rec-sub">5,000원</div>
+          </div>
+        </div>
+        <div class="recommend-card">
+          <div class="thumb">🌙</div>
+          <div class="rec-info">
+            <div class="rec-tag">운세</div>
+            <div class="rec-name">올해 나의 연간 운세</div>
+            <div class="rec-sub">3,000원</div>
+          </div>
+        </div>
+        <div class="recommend-card">
+          <div class="thumb">🌟</div>
+          <div class="rec-info">
+            <div class="rec-tag">재물운</div>
+            <div class="rec-name">2025 재물운 총정리</div>
+            <div class="rec-sub">4,000원</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rec-dots" id="recDots"></div>
+  </div>
+
+  <!-- 인연북 슬라이더 섹션 -->
+  <div class="yeon-section" id="yeonSection">
+    <div class="rec-section-header">
+      <span class="rec-section-title">서로의 사랑을 알아보자! , 인연북</span>
+      <a href="#" class="rec-section-more">전체 보기</a>
+    </div>
+    <div class="slider-outer" id="yeonOuter">
+      <div class="yeon-track" id="yeonTrack">
+        <div class="yeon-card">
+          <div class="card-thumb">💑<span class="deco">❤</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">궁합 · 인연</span>
+            <div class="yeon-title">우리 사이는 몇 점일까?<br>사랑 궁합 풀이</div>
+            <div class="yeon-desc">생년월일로 보는 두 사람의 인연</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🌸<span class="deco">✿</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">첫 만남</span>
+            <div class="yeon-title">나는 언제 사랑을<br>만나게 될까?</div>
+            <div class="yeon-desc">결혼 운과 인연 시기 예측</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">6,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🌙<span class="deco">★</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">연애운</span>
+            <div class="yeon-title">올해 나의 연애운<br>총정리</div>
+            <div class="yeon-desc">2025년 월별 애정 흐름 분석</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">4,000원</span>
+              <span class="yeon-heart liked" onclick="toggleYeonHeart(this)">♥</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">💍<span class="deco">◇</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">결혼 · 인연</span>
+            <div class="yeon-title">결혼 적령기와<br>배우자 사주 풀이</div>
+            <div class="yeon-desc">나와 맞는 배우자 사주 유형</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">7,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🔥<span class="deco">✦</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">열정 · 갈등</span>
+            <div class="yeon-title">헤어진 그 사람,<br>다시 만날 수 있을까?</div>
+            <div class="yeon-desc">재회 운과 인연의 끈 분석</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,500원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="yeon-dots" id="yeonDots"></div>
+  </div>
+
+  <!-- 재물복 슬라이더 섹션 -->
+  <div class="yeon-section" id="jaeSection">
+    <div class="rec-section-header">
+      <span class="rec-section-title">재물복을 알아보자! , 재물북</span>
+      <a href="#" class="rec-section-more">전체 보기</a>
+    </div>
+    <div class="slider-outer" id="jaeOuter">
+      <div class="yeon-track" id="jaeTrack">
+        <div class="yeon-card">
+          <div class="card-thumb">💰<span class="deco">₩</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">금전운</span>
+            <div class="yeon-title">올해 돈이 들어오는<br>시기는 언제일까?</div>
+            <div class="yeon-desc">재물운의 흐름을 파악하고 미리 대비하세요</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">📈<span class="deco">$</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">투자운</span>
+            <div class="yeon-title">투자와 사업,<br>지금이 적기일까?</div>
+            <div class="yeon-desc">오복할머니의 재물운 풀이로 결정하세요</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">6,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🌟<span class="deco">★</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">복권운</span>
+            <div class="yeon-title">뜻밖의 횡재,<br>나에게도 올까?</div>
+            <div class="yeon-desc">횡재수와 복권운을 함께 살펴봅니다</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">4,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🏦<span class="deco">◈</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">부동산운</span>
+            <div class="yeon-title">내 사주에 맞는<br>재테크 방법은?</div>
+            <div class="yeon-desc">사주로 보는 나만의 재물 축적 방법</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">7,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🍀<span class="deco">✦</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">행운운</span>
+            <div class="yeon-title">나의 행운 방향과<br>행운 색깔은?</div>
+            <div class="yeon-desc">오복할머니가 알려주는 나만의 행운 아이템</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">3,500원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="yeon-dots" id="jaeDots"></div>
+  </div>
+
+  <!-- 가정복 슬라이더 섹션 -->
+  <div class="yeon-section" id="gaSection">
+    <div class="rec-section-header">
+      <span class="rec-section-title">가정복을 알아보자! , 가정북</span>
+      <a href="#" class="rec-section-more">전체 보기</a>
+    </div>
+    <div class="slider-outer" id="gaOuter">
+      <div class="yeon-track" id="gaTrack">
+        <div class="yeon-card">
+          <div class="card-thumb">🏠<span class="deco">❤</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">가정운</span>
+            <div class="yeon-title">우리 가정의 운을<br>살펴보세요</div>
+            <div class="yeon-desc">가정의 화목과 행복을 위한 사주 풀이</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">👶<span class="deco">✿</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">임신운</span>
+            <div class="yeon-title">나는 언제<br>임신할까?</div>
+            <div class="yeon-desc">오복할머니가 임신운을 정성껏 풀어드립니다</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">6,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">👨‍👩‍👧<span class="deco">★</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">자녀운</span>
+            <div class="yeon-title">나는 어떤 자식과<br>인연일까?</div>
+            <div class="yeon-desc">자녀의 건강과 학업, 미래를 살펴보세요</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,500원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">💑<span class="deco">◇</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">부부운</span>
+            <div class="yeon-title">부부 사이의 운을<br>살펴보세요</div>
+            <div class="yeon-desc">더 행복한 결혼 생활을 만들어 가는 방법</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">7,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🌈<span class="deco">✦</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">액임살</span>
+            <div class="yeon-title">나에게도 액임살이<br>들어와 있을까?</div>
+            <div class="yeon-desc">현재 들어온 액임살의 정도를 확인해드립니다</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">4,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="yeon-dots" id="gaDots"></div>
+  </div>
+
+  <!-- 성공복 슬라이더 섹션 -->
+  <div class="yeon-section" id="seongSection">
+    <div class="rec-section-header">
+      <span class="rec-section-title">성공복을 알아보자! , 성공북</span>
+      <a href="#" class="rec-section-more">전체 보기</a>
+    </div>
+    <div class="slider-outer" id="seongOuter">
+      <div class="yeon-track" id="seongTrack">
+        <div class="yeon-card">
+          <div class="card-thumb">🏆<span class="deco">★</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">직업운</span>
+            <div class="yeon-title">나에게 맞는<br>직업과 성공의 길</div>
+            <div class="yeon-desc">직업운과 승진운으로 더 빛나는 나를 만드세요</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🚀<span class="deco">✦</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">사업운</span>
+            <div class="yeon-title">사업 성공의 기운이<br>내게 있을까?</div>
+            <div class="yeon-desc">창업이나 사업 확장 전 먼저 확인하세요</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">6,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">👑<span class="deco">◇</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">명예운</span>
+            <div class="yeon-title">사회적 명예와<br>인정을 받는 시기</div>
+            <div class="yeon-desc">당신이 인정받는 시기를 미리 알아봅니다</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,500원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">📊<span class="deco">↑</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">승진운</span>
+            <div class="yeon-title">올해 나의 승진운과<br>직장운은?</div>
+            <div class="yeon-desc">직장 내 나의 위치와 기회를 살펴봅니다</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">4,500원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🎯<span class="deco">✿</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">적성운</span>
+            <div class="yeon-title">나에게 맞는<br>적성과 재능 찾기</div>
+            <div class="yeon-desc">사주로 보는 나의 타고난 능력과 재능</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">4,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="yeon-dots" id="seongDots"></div>
+  </div>
+
+  <!-- 건강복 슬라이더 섹션 -->
+  <div class="yeon-section" id="gunSection">
+    <div class="rec-section-header">
+      <span class="rec-section-title">건강복을 알아보자! , 건강북</span>
+      <a href="#" class="rec-section-more">전체 보기</a>
+    </div>
+    <div class="slider-outer" id="gunOuter">
+      <div class="yeon-track" id="gunTrack">
+        <div class="yeon-card">
+          <div class="card-thumb">💊<span class="deco">✚</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">건강운</span>
+            <div class="yeon-title">올해 건강, 어떤 부분을<br>조심해야 할까?</div>
+            <div class="yeon-desc">건강운으로 미리 조심해야 할 부분을 확인하세요</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🌿<span class="deco">✿</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">장수운</span>
+            <div class="yeon-title">오래오래 건강하게<br>사는 비결</div>
+            <div class="yeon-desc">몸과 마음의 균형을 맞추는 방법</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">4,500원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🧘<span class="deco">★</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">치유운</span>
+            <div class="yeon-title">마음의 상처와<br>회복의 기운</div>
+            <div class="yeon-desc">치유와 회복의 기운을 함께 살펴봅니다</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">5,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🏃<span class="deco">◇</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">활력운</span>
+            <div class="yeon-title">내 사주에 맞는<br>건강 관리법은?</div>
+            <div class="yeon-desc">사주로 보는 나의 체질과 건강 관리 방법</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">4,000원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+        <div class="yeon-card">
+          <div class="card-thumb">🌸<span class="deco">❤</span></div>
+          <div class="yeon-body">
+            <span class="yeon-badge">정신운</span>
+            <div class="yeon-title">스트레스와 멘탈,<br>나의 정신 건강은?</div>
+            <div class="yeon-desc">정신적 건강과 마음의 안정을 찾는 방법</div>
+            <div class="yeon-footer">
+              <span class="yeon-price">3,500원</span>
+              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="yeon-dots" id="gunDots"></div>
+  </div>
+
+  <!-- 본문 영역 (비어있음) -->
+  <div class="content-area">
+  </div>
+
 
   <div class="cardnews-wrap" id="cardnews-인연복">
     <a href="https://www.obsd-reuniontest.co.kr/" target="_blank" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
-      <div class="card-img" style="background:#f5f0e8; padding:0; overflow:hidden;"><img src="images/image_13.png" style="width:100%; height:100%; object-fit:cover; display:block;" alt="재회가능성 테스트"></div>
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#3a1a2e"/>
+  <circle cx="215" cy="100" r="80" fill="#5a1a3a" opacity="0.5"/>
+  <text x="215" y="80" text-anchor="middle" font-size="48" fill="#c8729a">♥</text>
+  <text x="215" y="130" text-anchor="middle" font-size="13" fill="#e8b0c8" font-family="serif" letter-spacing="2">인연의 실</text>
+  <line x1="100" y1="160" x2="330" y2="160" stroke="#c8729a" stroke-width="0.5" opacity="0.4"/>
+  <circle cx="120" cy="185" r="3" fill="#c8729a" opacity="0.5"/>
+  <circle cx="215" cy="185" r="3" fill="#c8729a" opacity="0.8"/>
+  <circle cx="310" cy="185" r="3" fill="#c8729a" opacity="0.5"/>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">인연복</span>
         <div class="card-title">오복할머니의 재회가능성 테스트</div>
@@ -484,86 +1068,140 @@
       </div>
     </div>
     </a>
-    <div class="card-item">
-      <div class="card-img" style="background:#c8a97e;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#2a1a3a"/>
+  <circle cx="215" cy="105" r="60" fill="none" stroke="#a07898" stroke-width="1" opacity="0.5"/>
+  <circle cx="215" cy="105" r="40" fill="none" stroke="#a07898" stroke-width="0.5" opacity="0.3"/>
+  <text x="215" y="120" text-anchor="middle" font-size="44" fill="#d4a0c0">✦</text>
+  <text x="215" y="170" text-anchor="middle" font-size="12" fill="#c8a0b8" font-family="serif" letter-spacing="3">소울메이트</text>
+  <text x="100" y="55" font-size="10" fill="#a07898" opacity="0.6">✦</text>
+  <text x="340" y="45" font-size="8" fill="#a07898" opacity="0.4">✦</text>
+  <text x="60" y="150" font-size="7" fill="#a07898" opacity="0.5">✦</text>
+  <text x="360" y="160" font-size="9" fill="#a07898" opacity="0.4">✦</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">인연운</span>
         <div class="card-title">나의 소울메이트는 언제 만날까?</div>
-        <div class="card-desc">오복할머니가 당신의 인연운을 살펴봅니다.</div>
+        <div class="card-desc">오복할머니가 당신의 인연운을 정성껏 살펴봅니다.</div>
       </div>
     </div>
-    </a>
-    <div class="card-item">
-      <div class="card-img" style="background:#a07850;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#1e1428"/>
+  <circle cx="155" cy="100" r="35" fill="#4a2a5a" opacity="0.8"/>
+  <circle cx="275" cy="100" r="35" fill="#4a2a5a" opacity="0.8"/>
+  <ellipse cx="215" cy="100" rx="20" ry="20" fill="#6a3a7a" opacity="0.6"/>
+  <text x="155" y="106" text-anchor="middle" font-size="22" fill="#c8a0d0">人</text>
+  <text x="275" y="106" text-anchor="middle" font-size="22" fill="#c8a0d0">人</text>
+  <line x1="155" y1="100" x2="275" y2="100" stroke="#c8a0d0" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>
+  <text x="215" y="170" text-anchor="middle" font-size="12" fill="#b890c8" font-family="serif" letter-spacing="2">인간관계</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">관계운</span>
         <div class="card-title">주변 사람들과의 관계가 궁금하다면</div>
         <div class="card-desc">가족, 친구, 동료와의 관계운을 통해 더 좋은 인간관계를 만들어 가세요.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#7a5c38;">카드뉴스 이미지</div>
-      <div class="card-body">
-        <span class="card-tag">애정운</span>
-        <div class="card-title">사랑의 시작과 끝, 오복할머니가 알려드려요</div>
-        <div class="card-desc">애정운부터 결혼운까지 함께 풀어봅니다.</div>
-      </div>
-    </div>
   </div>
   <div class="cardnews-wrap" id="cardnews-사주">
     <a href="https://www.obsd-iljutest.co.kr/" target="_blank" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
-      <div class="card-img" style="background:#3a2210; padding:0; overflow:hidden;"><img src="images/image_14.png" style="width:100%; height:100%; object-fit:cover; display:block;" alt="오복신당 할머니"></div>
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#1a1005"/>
+  <rect x="145" y="50" width="140" height="110" rx="4" fill="#2e1a08" stroke="#8B6030" stroke-width="1.5"/>
+  <rect x="155" y="60" width="120" height="90" rx="2" fill="#1e1005"/>
+  <text x="215" y="100" text-anchor="middle" font-size="28" fill="#c8a050">命</text>
+  <text x="215" y="128" text-anchor="middle" font-size="11" fill="#a07838" letter-spacing="3">사주팔자</text>
+  <line x1="160" y1="72" x2="270" y2="72" stroke="#8B6030" stroke-width="0.5" opacity="0.5"/>
+  <line x1="160" y1="140" x2="270" y2="140" stroke="#8B6030" stroke-width="0.5" opacity="0.5"/>
+  <text x="215" y="178" text-anchor="middle" font-size="11" fill="#8B6030" font-family="serif" letter-spacing="2">오복신당</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">사주</span>
         <div class="card-title">오복신당 일주 테스트 하기</div>
         <div class="card-desc">나의 일주를 알면 타고난 기질과 운명의 흐름이 보입니다.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#7a5c38; padding:0; overflow:hidden;"><img src="images/image_10.png" style="width:100%; height:100%; object-fit:cover; display:block;" alt="오늘의 운세"></div>
+    </a>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#0e0c1a"/>
+  <circle cx="215" cy="90" r="55" fill="none" stroke="#6050a0" stroke-width="1" opacity="0.5"/>
+  <circle cx="215" cy="90" r="38" fill="#1a1530" opacity="0.8"/>
+  <text x="215" y="70" text-anchor="middle" font-size="10" fill="#a090d0" letter-spacing="2">오늘의</text>
+  <text x="215" y="100" text-anchor="middle" font-size="32" fill="#d0c0f0">☽</text>
+  <text x="215" y="120" text-anchor="middle" font-size="10" fill="#a090d0" letter-spacing="2">운세</text>
+  <text x="80" y="50" font-size="8" fill="#8070c0" opacity="0.5">★</text>
+  <text x="350" y="60" font-size="10" fill="#8070c0" opacity="0.4">★</text>
+  <text x="120" y="155" font-size="6" fill="#8070c0" opacity="0.4">★</text>
+  <text x="310" y="150" font-size="8" fill="#8070c0" opacity="0.5">★</text>
+  <text x="215" y="175" text-anchor="middle" font-size="11" fill="#7060b0" font-family="serif" letter-spacing="2">오복신당</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">운세</span>
         <div class="card-title">오늘의 운세</div>
         <div class="card-desc">오늘의 운세를 확인하고 행운 가득한 하루 되세요.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#5c3d1e;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#0a1020"/>
+  <rect x="90" y="70" width="250" height="80" rx="4" fill="#101828" stroke="#304878" stroke-width="1"/>
+  <text x="215" y="115" text-anchor="middle" font-size="42" fill="#4878c8" opacity="0.3">2025</text>
+  <text x="215" y="115" text-anchor="middle" font-size="16" fill="#a8c0e8" letter-spacing="3">年 運</text>
+  <line x1="90" y1="90" x2="340" y2="90" stroke="#304878" stroke-width="0.5" opacity="0.5"/>
+  <line x1="90" y1="130" x2="340" y2="130" stroke="#304878" stroke-width="0.5" opacity="0.5"/>
+  <text x="215" y="175" text-anchor="middle" font-size="11" fill="#506898" font-family="serif" letter-spacing="2">올해의 운세</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">운세</span>
         <div class="card-title">올해 나의 운세는 어떨까?</div>
         <div class="card-desc">연간·월간 운세를 통해 미리 대비해 보세요.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#a07850;">카드뉴스 이미지</div>
-      <div class="card-body">
-        <span class="card-tag">적성</span>
-        <div class="card-title">나에게 맞는 직업과 적성 알아보기</div>
-        <div class="card-desc">사주로 보는 나의 적성과 재능.</div>
-      </div>
-    </div>
   </div>
   <div class="cardnews-wrap" id="cardnews-재물복">
-    <div class="card-item">
-      <div class="card-img" style="background:#a07850;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#1a1200"/>
+  <circle cx="215" cy="95" r="55" fill="#2a1e00" stroke="#c8a000" stroke-width="1.5" opacity="0.7"/>
+  <text x="215" y="112" text-anchor="middle" font-size="48" fill="#d4a800">財</text>
+  <text x="215" y="170" text-anchor="middle" font-size="12" fill="#a07800" font-family="serif" letter-spacing="3">재물운</text>
+  <line x1="120" y1="155" x2="310" y2="155" stroke="#c8a000" stroke-width="0.5" opacity="0.3"/>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">금전운</span>
         <div class="card-title">올해 돈이 들어오는 시기는?</div>
         <div class="card-desc">재물운의 흐름을 파악하고 미리 대비하세요.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#8B6914;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#0e1408"/>
+  <polyline points="80,160 140,120 190,140 240,80 300,100 360,50" fill="none" stroke="#60a840" stroke-width="2"/>
+  <circle cx="360" cy="50" r="5" fill="#80d060"/>
+  <circle cx="240" cy="80" r="4" fill="#60a840" opacity="0.8"/>
+  <text x="215" y="185" text-anchor="middle" font-size="12" fill="#60a840" font-family="serif" letter-spacing="2">투자·사업운</text>
+  <line x1="80" y1="170" x2="370" y2="170" stroke="#304820" stroke-width="0.5"/>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">투자운</span>
         <div class="card-title">투자와 사업, 지금이 적기일까?</div>
         <div class="card-desc">오복할머니의 재물운 풀이로 현명한 결정을 내리세요.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#c8a97e;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#1a0e00"/>
+  <text x="215" y="90" text-anchor="middle" font-size="52" fill="#d4a800" opacity="0.9">★</text>
+  <text x="140" y="75" font-size="22" fill="#c89000" opacity="0.5">★</text>
+  <text x="290" y="80" font-size="18" fill="#c89000" opacity="0.4">★</text>
+  <text x="100" y="110" font-size="14" fill="#c89000" opacity="0.3">★</text>
+  <text x="320" y="115" font-size="16" fill="#c89000" opacity="0.35">★</text>
+  <text x="215" y="155" text-anchor="middle" font-size="14" fill="#e8c030" font-family="serif" letter-spacing="1">뜻밖의 횡재운</text>
+  <text x="215" y="178" text-anchor="middle" font-size="11" fill="#a07820" font-family="serif" letter-spacing="2">오복신당</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">복권운</span>
         <div class="card-title">뜻밖의 횡재, 나에게도 올까?</div>
@@ -574,7 +1212,15 @@
   <div class="cardnews-wrap" id="cardnews-가정복">
     <a href="https://www.obsd-aistest.co.kr/" target="_blank" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
-      <div class="card-img" style="background:#3a2210; padding:0; overflow:hidden;"><img src="images/image_16.png" style="width:100%; height:100%; object-fit:cover; display:block;" alt="액임살 테스트"></div>
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#1a1008"/>
+  <rect x="155" y="80" width="120" height="90" rx="8" fill="none" stroke="#c8a060" stroke-width="1.5" opacity="0.6"/>
+  <rect x="175" y="95" width="30" height="40" rx="4" fill="#a07838" opacity="0.5"/>
+  <rect x="225" y="100" width="30" height="35" rx="4" fill="#a07838" opacity="0.4"/>
+  <rect x="190" y="120" width="50" height="50" rx="0" fill="#2a1a08"/>
+  <text x="215" y="175" text-anchor="middle" font-size="12" fill="#c8a060" font-family="serif" letter-spacing="2">가정복</text>
+  <text x="215" y="60" text-anchor="middle" font-size="11" fill="#a07838" font-family="serif" letter-spacing="2">家 和 萬 事 成</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">가정복</span>
         <div class="card-title">나에게도 '액임살'이 들어와 있을까?</div>
@@ -582,24 +1228,32 @@
       </div>
     </div>
     </a>
-    <div class="card-item" onclick="location.href='pregnancy-fortune.html'" style="cursor:pointer;">
-      <img src="images/image_17.jpg" style="width:100%;height:100%;object-fit:cover;display:block;">
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#061008"/>
+  <circle cx="215" cy="95" r="50" fill="#0c1e0c" stroke="#30a050" stroke-width="1" opacity="0.6"/>
+  <text x="215" y="112" text-anchor="middle" font-size="42" fill="#50c070">壽</text>
+  <path d="M140 150 Q175 120 215 140 Q255 160 290 130" fill="none" stroke="#30a050" stroke-width="1" opacity="0.5"/>
+  <text x="215" y="178" text-anchor="middle" font-size="11" fill="#308040" font-family="serif" letter-spacing="2">장수운</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">임신운</span>
         <div class="card-title">나는 언제 임신할까?</div>
         <div class="card-desc">오복할머니가 당신의 임신운을 정성껏 풀어드립니다.</div>
       </div>
     </div>
-    <div class="card-item" onclick="location.href='saju_jashik.html'" style="cursor:pointer;">
-      <img src="images/image_18.jpg" style="width:100%;height:100%;object-fit:cover;display:block;">
-      <div class="card-body">
-        <span class="card-tag">자녀운</span>
-        <div class="card-title">나는 어떤 자식과 인연일까?</div>
-        <div class="card-desc">자녀의 건강과 학업, 미래를 함께 살펴보세요.</div>
-      </div>
-    </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#7a5c38;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#0a1010"/>
+  <circle cx="215" cy="95" r="50" fill="none" stroke="#40c0b0" stroke-width="1" opacity="0.4"/>
+  <circle cx="215" cy="95" r="30" fill="none" stroke="#40c0b0" stroke-width="0.5" opacity="0.3"/>
+  <text x="215" y="112" text-anchor="middle" font-size="36" fill="#60d0c0">癒</text>
+  <text x="215" y="175" text-anchor="middle" font-size="11" fill="#40a090" font-family="serif" letter-spacing="2">치유·회복운</text>
+  <circle cx="130" cy="60" r="2" fill="#40c0b0" opacity="0.4"/>
+  <circle cx="300" cy="50" r="2" fill="#40c0b0" opacity="0.3"/>
+  <circle cx="100" cy="150" r="1.5" fill="#40c0b0" opacity="0.3"/>
+  <circle cx="330" cy="145" r="2" fill="#40c0b0" opacity="0.35"/>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">부부운</span>
         <div class="card-title">부부 사이의 운을 살펴보세요</div>
@@ -608,24 +1262,42 @@
     </div>
   </div>
   <div class="cardnews-wrap" id="cardnews-성공복">
-    <div class="card-item">
-      <div class="card-img" style="background:#5c3d1e;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#0a0e1a"/>
+  <polygon points="215,40 240,100 305,100 255,138 275,200 215,162 155,200 175,138 125,100 190,100" fill="none" stroke="#8090d0" stroke-width="1.5" opacity="0.7"/>
+  <text x="215" y="120" text-anchor="middle" font-size="26" fill="#b0c0f0">成</text>
+  <text x="215" y="185" text-anchor="middle" font-size="11" fill="#7080b0" font-family="serif" letter-spacing="3">성공운</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">직업운</span>
         <div class="card-title">나에게 맞는 직업과 성공의 길</div>
         <div class="card-desc">직업운과 승진운으로 더 빛나는 나를 만드세요.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#7a5c38;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#081018"/>
+  <rect x="130" y="90" width="60" height="80" rx="3" fill="#102040" stroke="#3060a0" stroke-width="1"/>
+  <rect x="200" y="70" width="60" height="100" rx="3" fill="#102040" stroke="#3060a0" stroke-width="1"/>
+  <rect x="270" y="50" width="60" height="120" rx="3" fill="#102040" stroke="#3060a0" stroke-width="1"/>
+  <text x="215" y="188" text-anchor="middle" font-size="11" fill="#5080b0" font-family="serif" letter-spacing="2">사업·창업운</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">사업운</span>
         <div class="card-title">사업 성공의 기운이 내게 있을까?</div>
         <div class="card-desc">창업이나 사업 확장 전 먼저 확인하세요.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#a07850;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#100808"/>
+  <circle cx="215" cy="90" r="50" fill="none" stroke="#c07030" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="215" cy="90" r="35" fill="#1e0e08" opacity="0.9"/>
+  <text x="215" y="105" text-anchor="middle" font-size="34" fill="#e09040">貴</text>
+  <path d="M165 145 L215 125 L265 145" fill="none" stroke="#c07030" stroke-width="1" opacity="0.5"/>
+  <text x="215" y="175" text-anchor="middle" font-size="11" fill="#a06030" font-family="serif" letter-spacing="2">명예운</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">명예운</span>
         <div class="card-title">사회적 명예와 인정을 받는 시기</div>
@@ -634,24 +1306,46 @@
     </div>
   </div>
   <div class="cardnews-wrap" id="cardnews-건강복">
-    <div class="card-item">
-      <div class="card-img" style="background:#4a7a4a;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#081408"/>
+  <circle cx="215" cy="95" r="55" fill="none" stroke="#40a040" stroke-width="1" opacity="0.5"/>
+  <line x1="215" y1="55" x2="215" y2="135" stroke="#40c040" stroke-width="3" stroke-linecap="round"/>
+  <line x1="175" y1="95" x2="255" y2="95" stroke="#40c040" stroke-width="3" stroke-linecap="round"/>
+  <text x="215" y="175" text-anchor="middle" font-size="12" fill="#40a040" font-family="serif" letter-spacing="2">건강운</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">건강운</span>
         <div class="card-title">올해 건강, 어떤 부분을 조심해야 할까?</div>
         <div class="card-desc">건강운으로 미리 조심해야 할 부분을 확인하세요.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#5c7a5c;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#061008"/>
+  <circle cx="215" cy="95" r="50" fill="#0c1e0c" stroke="#30a050" stroke-width="1" opacity="0.6"/>
+  <text x="215" y="112" text-anchor="middle" font-size="42" fill="#50c070">壽</text>
+  <path d="M140 150 Q175 120 215 140 Q255 160 290 130" fill="none" stroke="#30a050" stroke-width="1" opacity="0.5"/>
+  <text x="215" y="178" text-anchor="middle" font-size="11" fill="#308040" font-family="serif" letter-spacing="2">장수운</text>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">장수운</span>
         <div class="card-title">오래오래 건강하게 사는 비결</div>
         <div class="card-desc">몸과 마음의 균형을 맞추는 방법.</div>
       </div>
     </div>
-    <div class="card-item">
-      <div class="card-img" style="background:#6a8a6a;">카드뉴스 이미지</div>
+    <div class="card-item" onclick="location.href='#'">
+<div class="card-img" style="padding:0; overflow:hidden;"><svg width="100%" height="220" viewBox="0 0 430 220" xmlns="http://www.w3.org/2000/svg">
+  <rect width="430" height="220" fill="#0a1010"/>
+  <circle cx="215" cy="95" r="50" fill="none" stroke="#40c0b0" stroke-width="1" opacity="0.4"/>
+  <circle cx="215" cy="95" r="30" fill="none" stroke="#40c0b0" stroke-width="0.5" opacity="0.3"/>
+  <text x="215" y="112" text-anchor="middle" font-size="36" fill="#60d0c0">癒</text>
+  <text x="215" y="175" text-anchor="middle" font-size="11" fill="#40a090" font-family="serif" letter-spacing="2">치유·회복운</text>
+  <circle cx="130" cy="60" r="2" fill="#40c0b0" opacity="0.4"/>
+  <circle cx="300" cy="50" r="2" fill="#40c0b0" opacity="0.3"/>
+  <circle cx="100" cy="150" r="1.5" fill="#40c0b0" opacity="0.3"/>
+  <circle cx="330" cy="145" r="2" fill="#40c0b0" opacity="0.35"/>
+</svg></div>
       <div class="card-body">
         <span class="card-tag">치유운</span>
         <div class="card-title">마음의 상처와 회복의 기운</div>
@@ -660,14 +1354,9 @@
     </div>
   </div>
 
-  <!-- 본문 영역 (비어있음) -->
-  <div class="content-area">
-  </div>
-
-
 <!-- 푸터 -->
-<footer style="background-color:#1a1209; width:100%; padding:32px 20px 24px; box-sizing:border-box; font-family:'Noto Serif KR', serif;">
-  <div style="max-width:430px; margin:0 auto; text-align:center;">
+<footer style="background-color:#1a1209; width:100vw; position:relative; left:50%; transform:translateX(-50%); padding:32px 20px 24px; box-sizing:border-box; font-family:'Noto Serif KR', serif;">
+  <div style="width:100%; text-align:center;">
     <!-- 로고 -->
     <img src="images/image_19.png" alt="오복신당" style="width:130px; height:auto; margin-bottom:20px;">
     <!-- 메뉴 링크 -->
@@ -877,29 +1566,202 @@
   // 로고 클릭 → 메인으로
   function goHome() {
     document.querySelectorAll('.cardnews-wrap').forEach(function(w){ w.classList.remove('active'); });
-    var slider = document.getElementById('sliderSection');
-    if (slider) slider.style.display = '';
-    var popular = document.querySelector('.popular-section');
-    if (popular) popular.style.display = '';
+    setMainVisible(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // 메뉴 클릭 → 슬라이더/카드뉴스 전환
+  // 메인 콘텐츠 요소들 토글
+  function setMainVisible(visible) {
+    var els = [
+      document.getElementById('sliderSection'),
+      document.querySelector('.popular-section'),
+      document.getElementById('recSection'),
+      document.getElementById('yeonSection'),
+      document.getElementById('jaeSection'),
+      document.getElementById('gaSection'),
+      document.getElementById('seongSection'),
+      document.getElementById('gunSection'),
+      document.querySelector('.content-area'),
+    ];
+    els.forEach(function(el) {
+      if (el) el.style.display = visible ? '' : 'none';
+    });
+  }
+
+  // 메뉴 클릭 → 카드 화면 전환
   function openPage(id) {
     var wrap = document.getElementById('cardnews-' + id);
     if (!wrap) return;
-    var isOpen = wrap.classList.contains('active');
-    var slider = document.getElementById('sliderSection');
-    var popular = document.querySelector('.popular-section');
     document.querySelectorAll('.cardnews-wrap').forEach(function(w){ w.classList.remove('active'); });
-    if (isOpen) {
-      slider.style.display = '';
-      popular.style.display = '';
-    } else {
-      slider.style.display = 'none';
-      popular.style.display = 'none';
-      wrap.classList.add('active');
+    setMainVisible(false);
+    wrap.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+
+  // 추천 사주 슬라이더
+  (function() {
+    const outer = document.getElementById('recOuter');
+    const track = document.getElementById('recTrack');
+    const dotsEl = document.getElementById('recDots');
+    if (!outer || !track) return;
+
+    const cards = track.querySelectorAll('.recommend-card');
+    const TOTAL = cards.length;
+    const GAP = 12;
+    let currentIndex = 0, startX = 0, isDragging = false, dragDelta = 0;
+
+    cards.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'rec-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+
+    function getCardW() { return cards[0].getBoundingClientRect().width + GAP; }
+
+    function goTo(index) {
+      currentIndex = Math.max(0, Math.min(index, TOTAL - 1));
+      track.style.transition = 'transform 0.32s cubic-bezier(.25,.46,.45,.94)';
+      track.style.transform = 'translateX(-' + (currentIndex * getCardW()) + 'px)';
+      dotsEl.querySelectorAll('.rec-dot').forEach((d, i) => d.classList.toggle('active', i === currentIndex));
     }
+
+    function onStart(x) { isDragging = true; startX = x; track.style.transition = 'none'; }
+    function onMove(x) {
+      if (!isDragging) return;
+      dragDelta = x - startX;
+      track.style.transform = 'translateX(' + (-(currentIndex * getCardW()) + dragDelta) + 'px)';
+    }
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      const th = getCardW() * 0.25;
+      if (dragDelta < -th) goTo(currentIndex + 1);
+      else if (dragDelta > th) goTo(currentIndex - 1);
+      else goTo(currentIndex);
+      dragDelta = 0;
+    }
+
+    outer.addEventListener('mousedown', e => { e.preventDefault(); onStart(e.clientX); });
+    window.addEventListener('mousemove', e => onMove(e.clientX));
+    window.addEventListener('mouseup', onEnd);
+    outer.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+    outer.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+    outer.addEventListener('touchend', onEnd);
+  })();
+
+  // 인연북 슬라이더
+  (function() {
+    const outer = document.getElementById('yeonOuter');
+    const track = document.getElementById('yeonTrack');
+    const dotsEl = document.getElementById('yeonDots');
+    if (!outer || !track) return;
+
+    const cards = track.querySelectorAll('.yeon-card');
+    const TOTAL = cards.length;
+    const GAP = 12;
+    let currentIndex = 0, startX = 0, isDragging = false, dragDelta = 0;
+
+    cards.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'yeon-dot' + (i === 0 ? ' active' : '');
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+
+    function getCardW() { return cards[0].getBoundingClientRect().width + GAP; }
+
+    function goTo(index) {
+      currentIndex = Math.max(0, Math.min(index, TOTAL - 1));
+      track.style.transition = 'transform 0.32s cubic-bezier(.25,.46,.45,.94)';
+      track.style.transform = 'translateX(-' + (currentIndex * getCardW()) + 'px)';
+      dotsEl.querySelectorAll('.yeon-dot').forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+    }
+
+    function onStart(x) { isDragging = true; startX = x; track.style.transition = 'none'; }
+    function onMove(x) {
+      if (!isDragging) return;
+      dragDelta = x - startX;
+      track.style.transform = 'translateX(' + (-(currentIndex * getCardW()) + dragDelta) + 'px)';
+    }
+    function onEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      const th = getCardW() * 0.25;
+      if (dragDelta < -th) goTo(currentIndex + 1);
+      else if (dragDelta > th) goTo(currentIndex - 1);
+      else goTo(currentIndex);
+      dragDelta = 0;
+    }
+
+    outer.addEventListener('mousedown', e => { e.preventDefault(); onStart(e.clientX); });
+    window.addEventListener('mousemove', e => onMove(e.clientX));
+    window.addEventListener('mouseup', onEnd);
+    outer.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+    outer.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+    outer.addEventListener('touchend', onEnd);
+  })();
+
+
+  // 추가 슬라이더 (재물복, 가정복, 성공복, 건강복)
+  [
+    { outer: 'jaeOuter', track: 'jaeTrack', dots: 'jaeDots', dotClass: 'jae-dot' },
+    { outer: 'gaOuter',  track: 'gaTrack',  dots: 'gaDots',  dotClass: 'ga-dot'  },
+    { outer: 'seongOuter', track: 'seongTrack', dots: 'seongDots', dotClass: 'seong-dot' },
+    { outer: 'gunOuter', track: 'gunTrack', dots: 'gunDots', dotClass: 'gun-dot' },
+  ].forEach(function(cfg) {
+    (function() {
+      const outer = document.getElementById(cfg.outer);
+      const track = document.getElementById(cfg.track);
+      const dotsEl = document.getElementById(cfg.dots);
+      if (!outer || !track) return;
+      const cards = track.querySelectorAll('.yeon-card');
+      const TOTAL = cards.length;
+      const GAP = 12;
+      let currentIndex = 0, startX = 0, isDragging = false, dragDelta = 0;
+
+      cards.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'yeon-dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(d);
+      });
+
+      function getCardW() { return cards[0].getBoundingClientRect().width + GAP; }
+      function goTo(index) {
+        currentIndex = Math.max(0, Math.min(index, TOTAL - 1));
+        track.style.transition = 'transform 0.32s cubic-bezier(.25,.46,.45,.94)';
+        track.style.transform = 'translateX(-' + (currentIndex * getCardW()) + 'px)';
+        dotsEl.querySelectorAll('.yeon-dot').forEach((d, i) => d.classList.toggle('active', i === currentIndex));
+      }
+      function onStart(x) { isDragging = true; startX = x; track.style.transition = 'none'; }
+      function onMove(x) {
+        if (!isDragging) return;
+        dragDelta = x - startX;
+        track.style.transform = 'translateX(' + (-(currentIndex * getCardW()) + dragDelta) + 'px)';
+      }
+      function onEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        const th = getCardW() * 0.25;
+        if (dragDelta < -th) goTo(currentIndex + 1);
+        else if (dragDelta > th) goTo(currentIndex - 1);
+        else goTo(currentIndex);
+        dragDelta = 0;
+      }
+      outer.addEventListener('mousedown', e => { e.preventDefault(); onStart(e.clientX); });
+      window.addEventListener('mousemove', e => onMove(e.clientX));
+      window.addEventListener('mouseup', onEnd);
+      outer.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+      outer.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+      outer.addEventListener('touchend', onEnd);
+    })();
+  });
+
+  function toggleYeonHeart(el) {
+    el.classList.toggle('liked');
+    el.textContent = el.classList.contains('liked') ? '♥' : '♡';
   }
 </script>
 </body>

@@ -1055,6 +1055,8 @@ footer{
       ↺ 처음으로 돌아가기
     </button>
 
+
+
     <!-- 팔찌 카드뉴스 -->
     <div class="bracelet-card" id="bracelet-card" style="display:none">
       <img class="bracelet-img" src="images/obokpalssi.png" alt="삼신 액막이 팔찌" onerror="this.style.display='none';this.nextElementSibling.style.paddingTop='28px'">
@@ -1068,19 +1070,10 @@ footer{
       </div>
     </div>
 
-    <!-- 자식운 티저 카드 -->
-    <div class="child-teaser-card" id="child-teaser-card" style="display:none">
-      <img class="child-teaser-img" src="images/image_18.jpg" alt="자식운 알아보기" onerror="this.style.minHeight='200px';this.style.background='#1a0a10'">
-      <div class="child-teaser-overlay">
-        <div class="child-teaser-badge">✦ 오복할머니와 함께 ✦</div>
-        <p class="child-teaser-title">내게 찾아올 아이,<br><em>어떤 인연으로 올까요?</em></p>
-        <p class="child-teaser-desc">오복할머니가 당신의 자식운을 정성껏 풀어드립니다.<br>아이의 기질, 찾아올 시기, 우리의 인연까지.</p>
-        <a class="child-teaser-btn" id="child-teaser-link" href="saju_jashik.html">
-          내게 찾아올 아이 확인하기
-          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-    </div>
+    <!-- 자식운 이미지 버튼 -->
+    <a class="child-teaser-card" id="child-teaser-card" href="saju_jashik.html" style="display:none;text-decoration:none;cursor:pointer;">
+      <img class="child-teaser-img" src="images/image_18.jpg" alt="자식운 알아보기" style="max-height:none;filter:brightness(1);">
+    </a>
 
   </div>
 
@@ -1375,8 +1368,8 @@ async function submitForm(){
   document.getElementById('loading').classList.add('visible');
   document.getElementById('result-cards').innerHTML='';
   document.getElementById('restart-btn').style.display='none';
-  document.getElementById('child-teaser-card').style.display='none';
   document.getElementById('bracelet-card').style.display='none';
+  document.getElementById('child-teaser-card').style.display='none';
 
   try{
     const res = await fetch('/api/fortune', {
@@ -1581,13 +1574,15 @@ function renderCards(data){
   grandmaCard.querySelector('.rc-text').textContent = data.grandma_words || '';
   cont.appendChild(grandmaCard);
 
+  // ── 팔찌 카드뉴스 표시 ──
+  const braceletCard = document.getElementById('bracelet-card');
+  if(braceletCard) braceletCard.style.display = 'block';
+
   // ── 자식운 티저 표시 ──
   const childTeaserCard = document.getElementById('child-teaser-card');
   if(childTeaserCard) childTeaserCard.style.display = 'block';
 
-  // ── 팔찌 카드뉴스 표시 ──
-  const braceletCard = document.getElementById('bracelet-card');
-  if(braceletCard) braceletCard.style.display = 'block';
+
 }
 
 function makeCard(icon, label){

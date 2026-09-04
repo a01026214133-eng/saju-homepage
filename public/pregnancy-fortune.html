@@ -502,50 +502,213 @@ select option{background:#2A1800}
   padding:0 4px;
 }
 
-/* 결과 카드 */
+/* ── 결과 카드 공통 ── */
+@keyframes unfold{to{opacity:1;transform:translateY(0)}}
 .result-card{
-  background:rgba(255,255,255,0.12);
-  border:1px solid rgba(255,255,255,0.22);
-  border-radius:14px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:16px;
   margin-bottom:14px;overflow:hidden;
   opacity:0;transform:translateY(14px);
   animation:unfold .5s ease forwards;
   backdrop-filter:blur(8px);
 }
-@keyframes unfold{to{opacity:1;transform:translateY(0)}}
-.result-card:nth-child(1){animation-delay:.08s}
-.result-card:nth-child(2){animation-delay:.2s}
-.result-card:nth-child(3){animation-delay:.32s}
-.result-card:nth-child(4){animation-delay:.44s}
-.result-card:nth-child(5){animation-delay:.56s}
+.result-card:nth-child(1){animation-delay:.04s}
+.result-card:nth-child(2){animation-delay:.12s}
+.result-card:nth-child(3){animation-delay:.2s}
+.result-card:nth-child(4){animation-delay:.28s}
+.result-card:nth-child(5){animation-delay:.36s}
+.result-card:nth-child(6){animation-delay:.44s}
+.result-card:nth-child(7){animation-delay:.52s}
+.result-card:nth-child(8){animation-delay:.6s}
+.result-card:nth-child(9){animation-delay:.68s}
+.result-card:nth-child(10){animation-delay:.76s}
+.result-card:nth-child(11){animation-delay:.84s}
+.result-card:nth-child(12){animation-delay:.92s}
 
 .rc-head{
   display:flex;align-items:center;gap:10px;
-  padding:14px 20px;
-  background:rgba(255,255,255,0.1);
-  border-bottom:1px solid rgba(255,255,255,0.15);
+  padding:13px 18px;
+  background:rgba(255,255,255,0.07);
+  border-bottom:1px solid rgba(255,255,255,0.1);
 }
-.rc-icon{font-size:1.25rem}
+.rc-icon{font-size:1.2rem}
 .rc-label{
   font-family:'Noto Serif KR',serif;
-  font-size:.8rem;letter-spacing:.1em;color:var(--gold-lt);
+  font-size:.78rem;letter-spacing:.08em;color:var(--gold-lt);
+  flex:1;
 }
-.rc-body{padding:18px 20px}
+.rc-body{padding:16px 18px}
 .rc-text{
-  font-size:.92rem;color:#F5E8D0;
-  line-height:2;white-space:pre-wrap;
+  font-size:.9rem;color:#F5E8D0;
+  line-height:1.9;white-space:pre-wrap;
 }
 
-.result-card.grandma .rc-head{
-  background:rgba(255,200,180,.1);
-  border-bottom-color:rgba(255,200,180,.2);
+/* ── REPORT 카드 (상단 요약) ── */
+.report-card{
+  background:linear-gradient(135deg,rgba(42,10,20,0.9),rgba(20,10,40,0.9));
+  border:1px solid rgba(244,160,184,.3);
+  border-radius:18px;
+  padding:24px 20px;
+  margin-bottom:16px;
+  opacity:0;transform:translateY(14px);
+  animation:unfold .5s ease .02s forwards;
+  backdrop-filter:blur(12px);
 }
+.report-title{
+  font-family:'Noto Serif KR',serif;
+  font-size:.72rem;letter-spacing:.2em;
+  color:var(--pink-lt);text-align:center;
+  margin-bottom:16px;
+}
+.report-stars-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin-bottom:16px;
+}
+.rs-item{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:10px;
+  padding:10px 12px;
+}
+.rs-label{font-size:.7rem;color:#D4B896;margin-bottom:4px}
+.rs-stars{font-size:.95rem;letter-spacing:1px}
+.star-on{color:#F5C86A}
+.star-off{color:rgba(255,255,255,0.2)}
+.report-divider{
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(244,160,184,.2),transparent);
+  margin:14px 0;
+}
+.report-meta{display:flex;flex-direction:column;gap:7px}
+.rm-row{display:flex;align-items:baseline;gap:8px;font-size:.82rem}
+.rm-key{color:#D4B896;min-width:120px;font-size:.75rem}
+.rm-val{color:var(--ivory);font-family:'Noto Serif KR',serif;font-weight:600}
+.report-type-badge{
+  margin-top:14px;
+  text-align:center;
+  background:rgba(244,160,184,.12);
+  border:1px solid rgba(244,160,184,.25);
+  border-radius:30px;
+  padding:10px 16px;
+  font-family:'Noto Serif KR',serif;
+  font-size:.85rem;color:var(--pink-lt);
+  letter-spacing:.05em;
+}
+
+/* ── 월별 그래프 카드 ── */
+.month-chart{
+  display:grid;grid-template-columns:repeat(12,1fr);
+  gap:4px;align-items:flex-end;
+  height:80px;
+  margin:12px 0 8px;
+}
+.month-bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+.month-bar{
+  width:100%;
+  border-radius:3px 3px 0 0;
+  background:linear-gradient(to top,#C75E7E,#F5C86A);
+  transition:height .8s cubic-bezier(.4,0,.2,1);
+  min-height:4px;
+}
+.month-bar.peak{background:linear-gradient(to top,#F4A0B8,#fff9c4);box-shadow:0 0 8px rgba(244,160,184,.5)}
+.month-label{font-size:.55rem;color:#D4B896;text-align:center}
+.chart-comment{font-size:.8rem;color:#D4B896;text-align:center;margin-top:4px;font-style:italic}
+
+/* ── 배지 스타일 유형 표시 ── */
+.type-badge{
+  display:inline-block;
+  background:rgba(232,168,64,.15);
+  border:1px solid rgba(232,168,64,.35);
+  border-radius:20px;
+  padding:5px 14px;
+  font-family:'Noto Serif KR',serif;
+  font-size:.85rem;color:var(--gold-lt);
+  margin-bottom:10px;
+}
+.nausea-badge{
+  background:rgba(144,200,160,.12);
+  border-color:rgba(144,200,160,.3);
+  color:var(--teal);
+}
+.food-badge{
+  background:rgba(244,160,184,.12);
+  border-color:rgba(244,160,184,.3);
+  color:var(--pink-lt);
+}
+.emotion-badge{color:#B8A0E8;background:rgba(184,160,232,.1);border-color:rgba(184,160,232,.25)}
+.mom-badge{color:#A0D4E8;background:rgba(160,212,232,.1);border-color:rgba(160,212,232,.25)}
+
+/* ── 별점 난이도 ── */
+.nausea-difficulty{
+  display:flex;align-items:center;gap:8px;
+  margin-top:10px;
+  font-size:.78rem;color:#D4B896;
+}
+.nd-stars{font-size:.95rem}
+
+/* ── 타임라인 ── */
+.timeline{
+  display:flex;align-items:flex-start;
+  gap:0;margin:12px 0 4px;
+  position:relative;
+}
+.tl-item{flex:1;text-align:center;position:relative}
+.tl-item::before{
+  content:'';
+  position:absolute;top:12px;left:50%;right:-50%;
+  height:2px;background:rgba(255,255,255,0.12);
+  z-index:0;
+}
+.tl-item:last-child::before{display:none}
+.tl-dot{
+  width:24px;height:24px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.1);
+  border:2px solid rgba(255,255,255,0.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;
+  margin:0 auto 6px;
+  position:relative;z-index:1;
+  transition:all .3s;
+}
+.tl-dot.hard{
+  background:rgba(199,94,126,.25);
+  border-color:rgba(199,94,126,.5);
+  box-shadow:0 0 10px rgba(199,94,126,.3);
+}
+.tl-name{font-size:.65rem;color:#D4B896}
+.tl-tag{
+  font-size:.6rem;color:var(--pink-lt);
+  margin-top:3px;font-style:italic;
+}
+
+/* ── 게임 스탯 ── */
+.stat-grid{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.stat-row{display:flex;align-items:center;gap:10px}
+.stat-name{font-size:.78rem;color:#D4B896;min-width:60px}
+.stat-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden}
+.stat-bar{height:100%;border-radius:4px;background:linear-gradient(90deg,#C75E7E,#F5C86A);transition:width 1s cubic-bezier(.4,0,.2,1)}
+.stat-stars{font-size:.85rem;min-width:76px;text-align:right}
+
+/* ── 순산운 ── */
+.birth-stars-row{
+  display:flex;justify-content:center;gap:6px;
+  font-size:1.6rem;margin:12px 0 8px;
+}
+
+/* ── 할머니 카드 ── */
+.result-card.grandma{
+  background:linear-gradient(135deg,rgba(60,20,30,0.6),rgba(30,10,50,0.6));
+  border-color:rgba(244,160,184,.3);
+}
+.result-card.grandma .rc-head{background:rgba(255,200,180,.08);border-bottom-color:rgba(255,200,180,.15)}
 .result-card.grandma .rc-label{color:var(--pink-lt)}
-.result-card.grandma .rc-body{background:rgba(255,200,180,.05)}
 .result-card.grandma .rc-text{
   font-family:'Noto Serif KR',serif;
-  font-size:1.03rem;font-weight:600;
-  color:var(--pink-lt);line-height:1.95;font-style:italic;
+  font-size:1rem;font-weight:600;
+  color:var(--pink-lt);line-height:2;font-style:italic;
+  text-align:center;
 }
 
 /* 재시작 */
@@ -1066,11 +1229,6 @@ async function submitForm(){
     if(!res.ok) throw new Error(`서버 오류 (${res.status})`);
     const result = await res.json();
     if(result.error) throw new Error(result.error);
-    // 사주 계산 결과를 result에 첨부 (임신운 지수용)
-    const _my = parseSaju(myDate, myHour);
-    const _sp = parseSaju(spDate, spHour);
-    result._my = _my;
-    result._sp = _sp;
     renderCards(result);
 
   }catch(e){
@@ -1084,46 +1242,217 @@ async function submitForm(){
 
 function buildPrompt(){} // 사용 안 함
 
-function calcPregIndex(my, sp){
-  // 자녀성 합산 (0~7개) → 기본 점수
-  const totalStar = my.childStar + sp.childStar;
-  const starScore = Math.min(totalStar / 7, 1) * 45; // 최대 45점
-
-  // 이번 해 길지지 여부 → 시기 점수
-  const curYear = new Date().getFullYear();
-  const 자녀오행 = my.생하는오행;
-  const 오행지지 = [[2,3],[5,6],[0,1,4,7],[8,9],[10,11]];
-  const 길지지 = 오행지지[자녀오행];
-  const yZ = ((curYear - 4) % 12 + 12) % 12;
-  const timingScore = 길지지.includes(yZ) ? 30 : 15; // 30 or 15점
-
-  // 부부 음양 조화 → 조화 점수
-  const 음양my = 천간음양[my.gz.day.gan];
-  const 음양sp = 천간음양[sp.gz.day.gan];
-  const harmonyScore = (음양my !== 음양sp) ? 20 : 10; // 20 or 10점
-
-  // 약간의 랜덤 편차 ±5
-  const jitter = Math.floor(Math.random() * 11) - 5;
-
-  const total = Math.min(99, Math.max(30, Math.round(starScore + timingScore + harmonyScore + jitter)));
-  return total;
+/* ─── 별점 렌더 헬퍼 ─── */
+function renderStars(n, total=5, onChar='🌸', offChar='🤍'){
+  return Array.from({length:total},(_,i)=>
+    `<span class="${i<n?'star-on':'star-off'}">${i<n?onChar:offChar}</span>`
+  ).join('');
+}
+function renderStarsText(n, total=5){
+  return '★'.repeat(n) + '☆'.repeat(total-n);
 }
 
-function getIndexComment(score){
-  if(score >= 90) return '지금 이 순간, 생명의 기운이 활짝 열려 있어요. ✨';
-  if(score >= 75) return '임신의 기운이 무르익고 있어요. 따뜻하게 마음을 여세요. 🌸';
-  if(score >= 60) return '조금씩 기운이 쌓이고 있어요. 꾸준히 몸과 마음을 돌봐요. 🌱';
-  if(score >= 45) return '인연은 천천히 다가오고 있어요. 조급해하지 마세요. 🌙';
-  return '지금은 내면을 가꾸는 시간이에요. 좋은 기운이 반드시 찾아와요. 🕯️';
+function renderCards(data){
+  const cont = document.getElementById('result-cards');
+  cont.innerHTML = '';
+
+  // ── 0. REPORT 요약 카드 ──
+  const pregStar = data.preg_star || 3;
+  const nauseaStar = data.nausea_star || 3;
+  const energyStar = data.energy_star || 3;
+  const birthStar = data.birth_star || 3;
+  const sensitiveStar = data.sensitive_star || 3;
+
+  const reportCard = document.createElement('div');
+  reportCard.className = 'report-card';
+  reportCard.innerHTML = `
+    <p class="report-title">✦ 나의 임신운 REPORT ✦</p>
+    <div class="report-stars-grid">
+      <div class="rs-item">
+        <div class="rs-label">임신운</div>
+        <div class="rs-stars">${renderStars(pregStar,'5','🌸','🤍')}</div>
+      </div>
+      <div class="rs-item">
+        <div class="rs-label">입덧운</div>
+        <div class="rs-stars">${renderStars(nauseaStar,'5','🌊','🤍')}</div>
+      </div>
+      <div class="rs-item">
+        <div class="rs-label">체력운</div>
+        <div class="rs-stars">${renderStars(energyStar,'5','⚡','🤍')}</div>
+      </div>
+      <div class="rs-item">
+        <div class="rs-label">순산운</div>
+        <div class="rs-stars">${renderStars(birthStar,'5','🌟','🤍')}</div>
+      </div>
+      <div class="rs-item" style="grid-column:1/-1">
+        <div class="rs-label">예민도</div>
+        <div class="rs-stars">${renderStars(sensitiveStar,'5','🌙','🤍')}</div>
+      </div>
+    </div>
+    <div class="report-divider"></div>
+    <div class="report-meta">
+      <div class="rm-row"><span class="rm-key">당길 가능성 높은 음식</span><span class="rm-val">→ ${data.craving_food||''}</span></div>
+      <div class="rm-row"><span class="rm-key">가장 편안한 시기</span><span class="rm-val">→ 임신 ${data.hard_period==='초기'?'중기':data.hard_period==='중기'?'초기':'중기'}</span></div>
+      <div class="rm-row"><span class="rm-key">컨디션 관리 필요 시기</span><span class="rm-val">→ 임신 ${data.care_period||'초기'}</span></div>
+    </div>
+    <div class="report-type-badge">「 ${data.pregnancy_style||''} 」</div>
+  `;
+  cont.appendChild(reportCard);
+
+  // ── 1. 임신운 지수 ──
+  addIndexCard(cont, pregStar);
+
+  // ── 2. 임신운 강해지는 시기 + 월별 그래프 ──
+  const timingCard = makeCard('🌱', '② 임신운이 강해지는 시기');
+  timingCard.querySelector('.rc-body').innerHTML = `
+    <p class="rc-text" style="font-family:'Noto Serif KR',serif;font-size:.95rem;color:var(--gold-lt);margin-bottom:10px;">${data.timing_title||''}</p>
+    <p class="rc-text">${data.timing_desc||''}</p>
+    <div class="month-chart" id="month-chart"></div>
+    <div class="chart-comment">${data.monthly_comment||''}</div>
+  `;
+  cont.appendChild(timingCard);
+  setTimeout(()=>renderMonthChart(data.monthly_fortune), 300);
+
+  // ── 3. 나의 임신 타이밍 ──
+  addSimpleCard(cont,'🗓️','③ 나의 임신 타이밍', data.pregnancy_timing||'');
+
+  // ── 4. 임신 초기 나의 스타일 ──
+  const styleCard = makeCard('🪞','④ 임신 초기 나의 스타일');
+  styleCard.querySelector('.rc-body').innerHTML = `
+    <div class="type-badge">${data.pregnancy_style||''}</div>
+    <p class="rc-text">${data.pregnancy_style_desc||''}</p>
+  `;
+  cont.appendChild(styleCard);
+
+  // ── 5. 입덧운 ──
+  const nauseaCard = makeCard('🌊','⑤ 나의 입덧운');
+  nauseaCard.querySelector('.rc-body').innerHTML = `
+    <div class="type-badge nausea-badge">${data.nausea_type||''}</div>
+    <p class="rc-text">${data.nausea_desc||''}</p>
+    <div class="nausea-difficulty">
+      <span>입덧 난이도</span>
+      <span class="nd-stars">${renderStarsText(nauseaStar)}</span>
+    </div>
+  `;
+  cont.appendChild(nauseaCard);
+
+  // ── 6. 당기는 음식 ──
+  const foodCard = makeCard('🍑','⑥ 임신 중 당기는 음식');
+  foodCard.querySelector('.rc-body').innerHTML = `
+    <div class="type-badge food-badge">🍽 ${data.craving_food||''}</div>
+    <p class="rc-text">${data.craving_desc||''}</p>
+  `;
+  cont.appendChild(foodCard);
+
+  // ── 7. 감정 변화 ──
+  const emotionCard = makeCard('💜','⑦ 임신 중 감정 변화');
+  emotionCard.querySelector('.rc-body').innerHTML = `
+    <div class="type-badge emotion-badge">${data.emotion_type||''}</div>
+    <p class="rc-text">${data.emotion_desc||''}</p>
+  `;
+  cont.appendChild(emotionCard);
+
+  // ── 8. 가장 힘든 시기 (타임라인) ──
+  const hardCard = makeCard('📅','⑧ 임신 중 가장 힘든 시기');
+  const hardPeriod = data.hard_period || '초기';
+  const periods = ['초기','중기','후기','출산'];
+  const periodEmoji = ['🌱','🌸','🌕','👶'];
+  const tlItems = periods.map((p,i)=>{
+    const isHard = p === hardPeriod;
+    return `<div class="tl-item">
+      <div class="tl-dot${isHard?' hard':''}">
+        ${isHard?'💫':periodEmoji[i]}
+      </div>
+      <div class="tl-name">${p}</div>
+      ${isHard?`<div class="tl-tag">가장 힘든 시기</div>`:''}
+    </div>`;
+  }).join('');
+  hardCard.querySelector('.rc-body').innerHTML = `
+    <div class="timeline">${tlItems}</div>
+    <p class="rc-text" style="margin-top:12px">${data.hard_period_desc||''}</p>
+  `;
+  cont.appendChild(hardCard);
+
+  // ── 9. 임신 난이도 (게임 스탯) ──
+  const diffCard = makeCard('🎮','⑨ 나의 임신 난이도');
+  diffCard.querySelector('.rc-body').innerHTML = `
+    <div class="stat-grid" id="stat-grid">
+      ${makeStatRow('체력', energyStar)}
+      ${makeStatRow('멘탈', 6-sensitiveStar)}
+      ${makeStatRow('입덧', nauseaStar)}
+      ${makeStatRow('순산운', birthStar)}
+    </div>
+    <p class="rc-text" style="margin-top:12px;font-style:italic;color:#D4B896;font-size:.82rem">「 ${data.pregnancy_style||''} 」</p>
+  `;
+  cont.appendChild(diffCard);
+  setTimeout(()=>{
+    diffCard.querySelectorAll('.stat-bar').forEach(b=>{
+      b.style.width = b.dataset.pct + '%';
+    });
+  }, 500);
+
+  // ── 10. 컨디션 관리 필요 시기 ──
+  addSimpleCard(cont,'🕯️','⑩ 특히 신경 써야 할 시기', `임신 ${data.care_period||'초기'}에 컨디션 관리를 잘 해주세요.\n\n${data.care_desc||''}`);
+
+  // ── 11. 순산운 ──
+  const birthCard = makeCard('🌟','⑪ 순산운');
+  birthCard.querySelector('.rc-body').innerHTML = `
+    <div class="birth-stars-row">${renderStars(birthStar,5,'⭐','☆')}</div>
+    <p class="rc-text">${data.birth_desc||''}</p>
+  `;
+  cont.appendChild(birthCard);
+
+  // ── 12. 출산 후 어떤 엄마? ──
+  const momCard = makeCard('👶','⑫ 출산 후 나는 어떤 엄마?');
+  momCard.querySelector('.rc-body').innerHTML = `
+    <div class="type-badge mom-badge">🤱 ${data.mom_type||''}</div>
+    <p class="rc-text">${data.mom_type_desc||''}</p>
+  `;
+  cont.appendChild(momCard);
+
+  // ── 13. 오복할머니 한마디 ──
+  const grandmaCard = makeCard('🌸','오복할머니 한마디');
+  grandmaCard.className = 'result-card grandma';
+  grandmaCard.querySelector('.rc-head').innerHTML = `<span class="rc-icon">🌸</span><span class="rc-label">오복할머니 한마디</span>`;
+  grandmaCard.querySelector('.rc-text').textContent = data.grandma_words || '';
+  cont.appendChild(grandmaCard);
 }
 
-function renderPregIndex(my, sp, cont){
-  const score = calcPregIndex(my, sp);
-  const starFilled = Math.round(score / 20); // 1~5
-  const comment = getIndexComment(score);
+function makeCard(icon, label){
+  const c = document.createElement('div');
+  c.className = 'result-card';
+  c.innerHTML = `
+    <div class="rc-head"><span class="rc-icon">${icon}</span><span class="rc-label">${label}</span></div>
+    <div class="rc-body"><div class="rc-text"></div></div>
+  `;
+  return c;
+}
+
+function addSimpleCard(cont, icon, label, text){
+  const c = makeCard(icon, label);
+  c.querySelector('.rc-text').textContent = text;
+  cont.appendChild(c);
+}
+
+function makeStatRow(name, star){
+  const pct = (star / 5) * 100;
+  return `<div class="stat-row">
+    <span class="stat-name">${name}</span>
+    <div class="stat-bar-wrap"><div class="stat-bar" data-pct="${pct}" style="width:0%"></div></div>
+    <span class="stat-stars">${renderStarsText(star)}</span>
+  </div>`;
+}
+
+function addIndexCard(cont, pregStar){
+  const score = Math.round((pregStar / 5) * 69) + 30; // 30~99 범위
+  const comment = pregStar >= 5 ? '지금 이 순간, 생명의 기운이 활짝 열려 있어요. ✨'
+    : pregStar >= 4 ? '임신의 기운이 무르익고 있어요. 따뜻하게 마음을 여세요. 🌸'
+    : pregStar >= 3 ? '조금씩 기운이 쌓이고 있어요. 꾸준히 몸과 마음을 돌봐요. 🌱'
+    : pregStar >= 2 ? '인연은 천천히 다가오고 있어요. 조급해하지 마세요. 🌙'
+    : '지금은 내면을 가꾸는 시간이에요. 좋은 기운이 반드시 찾아와요. 🕯️';
 
   const stars = Array.from({length:5},(_,i)=>
-    `<span class="pi-star${i < starFilled ? ' on' : ''}">🌸</span>`
+    `<span class="pi-star${i<pregStar?' on':''}">🌸</span>`
   ).join('');
 
   const card = document.createElement('div');
@@ -1134,18 +1463,14 @@ function renderPregIndex(my, sp, cont){
       <span class="pi-score" id="pi-score-num">0</span>
       <span class="pi-unit">%</span>
     </div>
-    <div class="pi-gauge-wrap">
-      <div class="pi-gauge-bar" id="pi-bar"></div>
-    </div>
+    <div class="pi-gauge-wrap"><div class="pi-gauge-bar" id="pi-bar"></div></div>
     <div class="pi-stars">${stars}</div>
     <p class="pi-comment">${comment}</p>
   `;
   cont.appendChild(card);
 
-  // 애니메이션
   setTimeout(()=>{
     document.getElementById('pi-bar').style.width = score + '%';
-    // 숫자 카운트업
     let cur = 0;
     const step = Math.ceil(score / 40);
     const timer = setInterval(()=>{
@@ -1156,35 +1481,25 @@ function renderPregIndex(my, sp, cont){
   }, 200);
 }
 
-function renderCards(data){
-  const secs=[
-    {icon:'🌱',label:'① 임신운이 강해지는 시기',key:'timing'},
-    {icon:'🏠',label:'② 현재 가족의 전체적인 흐름',key:'family_flow'},
-    {icon:'👼',label:'③ 새로운 아이와의 인연 흐름',key:'connection'},
-    {icon:'🕯️',label:'④ 임신운을 맞이하기 위한 행동',key:'action'},
-    {icon:'🌸',label:'⑤ 오복할머니 한마디',key:'grandma_words',grandma:true},
-  ];
-  const cont=document.getElementById('result-cards');
-
-  // 임신운 지수 카드 먼저 삽입
-  if(data._my && data._sp){
-    renderPregIndex(data._my, data._sp, cont);
-  }
-
-  secs.forEach(s=>{
-    const c=document.createElement('div');
-    c.className='result-card'+(s.grandma?' grandma':'');
-    c.innerHTML=`
-      <div class="rc-head"><span class="rc-icon">${s.icon}</span><span class="rc-label">${s.label}</span></div>
-      <div class="rc-body"><div class="rc-text">${formatText((data[s.key]||'').trim())}</div></div>`;
-    cont.appendChild(c);
-  });
+function renderMonthChart(monthly){
+  const el = document.getElementById('month-chart');
+  if(!el || !monthly) return;
+  const months = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+  const max = Math.max(...monthly);
+  const peakIdx = monthly.indexOf(max);
+  el.innerHTML = monthly.map((v,i)=>{
+    const pct = (v / 10) * 100;
+    const isPeak = i === peakIdx;
+    return `<div class="month-bar-wrap">
+      <div class="month-bar${isPeak?' peak':''}" style="height:${pct}%"></div>
+      <div class="month-label">${months[i]}</div>
+    </div>`;
+  }).join('');
 }
 
 function formatText(text){
   return text
-    .replace(/([,，])\s*/g, '$1\n')
-    .replace(/([.。!?])\s*(?=[^\s🌱🌸🌕💛🏮🌿🔥🌍✨💧🧿])/g, '$1\n')
+    .replace(/([.。!?])\s*(?=[^\s])/g,'$1\n')
     .trim();
 }
 

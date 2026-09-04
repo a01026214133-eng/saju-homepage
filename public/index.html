@@ -95,7 +95,7 @@
       position: fixed;
       top: 0;
       right: -320px;
-      width: 260px;
+      width: 280px;
       height: 100vh;
       background: #fff;
       z-index: 101;
@@ -103,9 +103,237 @@
       transition: right 0.32s cubic-bezier(0.4, 0, 0.2, 1);
       display: flex;
       flex-direction: column;
-      padding: 40px 28px 32px;
+      padding: 0;
+      overflow: hidden;
     }
     .side-panel.active { right: 0; }
+
+    /* 패널 내부 슬라이드 뷰 컨테이너 */
+    .panel-views {
+      display: flex;
+      width: 200%;
+      height: 100%;
+      transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .panel-views.show-edit { transform: translateX(-50%); }
+    .panel-view {
+      width: 50%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-shrink: 0;
+      padding: 40px 28px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 회원정보 수정 뷰 전용 스타일 */
+    .edit-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 18px;
+      font-weight: 400;
+      color: #c8b89a;
+      letter-spacing: 0.2em;
+      background-color: #1a1209;
+      margin: -40px -28px 0;
+      padding: 0 16px 0 4px;
+      border-bottom: 1px solid #3a2e1a;
+      min-height: 72px;
+    }
+    .edit-back-btn {
+      background: none;
+      border: none;
+      color: #c8b89a;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 16px 10px 16px 14px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .edit-section-title {
+      font-size: 11px;
+      color: #a09080;
+      letter-spacing: 0.05em;
+      margin: 24px 0 4px;
+    }
+
+    /* 프로필 사진 */
+    .edit-avatar-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0 18px;
+      border-bottom: 1px solid #f0e8da;
+      margin: 0 -28px;
+    }
+    .edit-avatar-circle {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      cursor: pointer;
+    }
+    .edit-avatar-bg {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #1a1209;
+      border: 2.5px solid #c8b89a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      overflow: hidden;
+    }
+    .edit-avatar-bg img { width:100%; height:100%; object-fit:cover; display:none; }
+    .edit-avatar-badge {
+      position: absolute;
+      bottom: 1px; right: 1px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: #8B1520;
+      border: 2px solid #fff;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .edit-avatar-badge svg { width:10px; height:10px; fill:#fff; }
+    .edit-avatar-hint { margin-top:8px; font-size:11px; color:#b0a090; }
+
+    /* 폼 행 */
+    .edit-form-row {
+      padding: 14px 0;
+      border-bottom: 1px solid #f0e8da;
+    }
+    .edit-form-row:last-child { border-bottom: none; }
+    .edit-form-label {
+      display: block;
+      font-size: 10px;
+      color: #a09080;
+      letter-spacing: 0.05em;
+      margin-bottom: 5px;
+    }
+    .edit-form-input {
+      width: 100%;
+      border: none;
+      background: none;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 14px;
+      color: #2a1f14;
+      outline: none;
+      padding: 2px 0;
+    }
+    .edit-form-input::placeholder { color: #c8bfb4; }
+    .edit-form-input[readonly] { color: #b0a090; cursor: default; }
+    .edit-readonly-note { font-size: 10px; color: #b0a090; margin-top: 3px; }
+
+    /* 생년월일 */
+    .edit-dob-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+    .edit-dob-select {
+      width: 100%;
+      border: none;
+      background: none;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 14px;
+      color: #2a1f14;
+      outline: none;
+      padding: 2px 0;
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+    }
+    .edit-dob-select option[value=""] { color: #c8bfb4; }
+
+    /* 전화번호 인증 */
+    .edit-phone-wrap { display: flex; align-items: center; gap: 8px; }
+    .edit-phone-wrap .edit-form-input { flex: 1; }
+    .edit-verify-btn {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      background: #1a1209;
+      color: #c8b89a;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 11px;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.18s;
+    }
+    .edit-verify-btn:hover { background: #3a2e22; }
+    .edit-verify-btn:disabled { background: #ccc; color: #fff; cursor: default; }
+    .edit-otp-row {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .edit-otp-row.visible { display: flex; }
+    .edit-otp-input {
+      flex: 1;
+      border: none;
+      border-bottom: 1.5px solid #c8b89a;
+      background: none;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 16px;
+      color: #2a1f14;
+      letter-spacing: 0.3em;
+      outline: none;
+      padding: 4px 0;
+      text-align: center;
+    }
+    .edit-otp-timer { font-size: 11px; color: #8B1520; flex-shrink: 0; min-width: 32px; text-align: right; }
+    .edit-otp-confirm {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      background: #8B1520;
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    /* 저장 버튼 */
+    .edit-save-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 13px;
+      background: #1a1209;
+      color: #c8b89a;
+      border: none;
+      border-radius: 7px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .edit-save-btn:hover { background: #3a2e22; }
+    .edit-save-btn:disabled { background: #ccc; color: #fff; cursor: default; }
+
+    /* 패널 토스트 */
+    .panel-toast {
+      position: fixed;
+      bottom: 28px;
+      right: 16px;
+      background: #1a1209;
+      color: #c8b89a;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 10px 18px;
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateY(10px);
+      pointer-events: none;
+      z-index: 200;
+      white-space: nowrap;
+    }
+    .panel-toast.show { opacity: 1; transform: translateY(0); }
 
     .panel-close {
       position: absolute;
@@ -604,7 +832,7 @@
   <section class="slider-section" id="sliderSection">
     <div class="slider-wrapper">
       <div class="slider-track" id="sliderTrack">
-        <div class="slide"><img class="slide-img" src="images/image_10.png" alt="오늘의 운세"></div>
+        <div class="slide"><img class="slide-img" src="images/image_16.png" alt="액임살 테스트"></div>
         <div class="slide"><img class="slide-img" src="images/image_11.png" alt="임신운"></div>
         <div class="slide"><img class="slide-img" src="images/image_12.png" alt="자식운"></div>
       </div>
@@ -1787,30 +2015,94 @@
 
 <!-- 딤 오버레이 -->
 <div class="dim-overlay" id="dimOverlay" onclick="closePanel()"></div>
-<!-- 우측 슬라이드 로그인 패널 -->
+<!-- 우측 슬라이드 패널 -->
 <div class="side-panel" id="sidePanel">
-  <button class="panel-close" onclick="closePanel()">&#215;</button>
-  <h2>로그인</h2>
-  <div class="social-login-wrap">
-    <!-- 카카오 -->
-    <button class="social-btn kakao" onclick="loginWith('kakao')">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 2C5.582 2 2 4.91 2 8.5c0 2.26 1.418 4.247 3.566 5.437L4.74 17.1a.3.3 0 0 0 .438.33l3.94-2.63A9.2 9.2 0 0 0 10 15c4.418 0 8-2.91 8-6.5S14.418 2 10 2z" fill="#191919"/>
-      </svg>
-      카카오 로그인
-    </button>
-    <!-- 구글 -->
-    <button class="social-btn google" onclick="loginWith('google')">
-      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19.6 10.23c0-.68-.06-1.36-.17-2H10v3.79h5.4a4.63 4.63 0 0 1-2 3.04v2.52h3.23c1.89-1.74 2.97-4.3 2.97-7.35z" fill="#4285F4"/>
-        <path d="M10 20c2.7 0 4.96-.9 6.62-2.42l-3.23-2.52c-.9.6-2.04.96-3.39.96-2.6 0-4.81-1.76-5.6-4.12H1.07v2.6A10 10 0 0 0 10 20z" fill="#34A853"/>
-        <path d="M4.4 11.9A6.02 6.02 0 0 1 4.08 10c0-.66.11-1.3.32-1.9V5.5H1.07A10 10 0 0 0 0 10c0 1.61.38 3.13 1.07 4.5l3.33-2.6z" fill="#FBBC05"/>
-        <path d="M10 3.98c1.47 0 2.79.5 3.83 1.5l2.87-2.87C14.95.99 12.7 0 10 0A10 10 0 0 0 1.07 5.5l3.33 2.6C5.19 5.74 7.4 3.98 10 3.98z" fill="#EA4335"/>
-      </svg>
-      구글 로그인
-    </button>
-  </div>
+  <div class="panel-views" id="panelViews">
+
+    <!-- ① 마이페이지 / 로그인 뷰 -->
+    <div class="panel-view" id="panelViewMain">
+      <button class="panel-close" onclick="closePanel()">&#215;</button>
+      <h2 id="panelTitle">로그인</h2>
+      <!-- 로그인 폼 (기본 노출) -->
+      <div id="loginArea">
+        <div class="social-login-wrap">
+          <button class="social-btn kakao" onclick="loginWith('kakao')">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 2C5.582 2 2 4.91 2 8.5c0 2.26 1.418 4.247 3.566 5.437L4.74 17.1a.3.3 0 0 0 .438.33l3.94-2.63A9.2 9.2 0 0 0 10 15c4.418 0 8-2.91 8-6.5S14.418 2 10 2z" fill="#191919"/>
+            </svg>
+            카카오 로그인
+          </button>
+          <button class="social-btn google" onclick="loginWith('google')">
+            <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.6 10.23c0-.68-.06-1.36-.17-2H10v3.79h5.4a4.63 4.63 0 0 1-2 3.04v2.52h3.23c1.89-1.74 2.97-4.3 2.97-7.35z" fill="#4285F4"/>
+              <path d="M10 20c2.7 0 4.96-.9 6.62-2.42l-3.23-2.52c-.9.6-2.04.96-3.39.96-2.6 0-4.81-1.76-5.6-4.12H1.07v2.6A10 10 0 0 0 10 20z" fill="#34A853"/>
+              <path d="M4.4 11.9A6.02 6.02 0 0 1 4.08 10c0-.66.11-1.3.32-1.9V5.5H1.07A10 10 0 0 0 0 10c0 1.61.38 3.13 1.07 4.5l3.33-2.6z" fill="#FBBC05"/>
+              <path d="M10 3.98c1.47 0 2.79.5 3.83 1.5l2.87-2.87C14.95.99 12.7 0 10 0A10 10 0 0 0 1.07 5.5l3.33 2.6C5.19 5.74 7.4 3.98 10 3.98z" fill="#EA4335"/>
+            </svg>
+            구글 로그인
+          </button>
+        </div>
+      </div>
+      <!-- 로그인 후 마이페이지 (JS로 주입) -->
+      <div id="mypageArea" style="display:none;"></div>
+    </div>
+
+    <!-- ② 회원정보 수정 뷰 -->
+    <div class="panel-view" id="panelViewEdit">
+      <!-- 수정 헤더 -->
+      <div class="edit-header">
+        <button class="edit-back-btn" onclick="closeEditView()">&#8592;</button>
+        <span>회원정보 수정</span>
+      </div>
+
+
+
+      <!-- 이름/닉네임 -->
+      <div class="edit-form-row">
+        <label class="edit-form-label" for="editName">이름 / 닉네임</label>
+        <input class="edit-form-input" id="editName" type="text" placeholder="이름 또는 닉네임" maxlength="20" autocomplete="off">
+      </div>
+
+      <!-- 생년월일 -->
+      <div class="edit-form-row">
+        <label class="edit-form-label">생년월일</label>
+        <div class="edit-dob-row">
+          <select class="edit-dob-select" id="editDobYear"><option value="">년도</option></select>
+          <select class="edit-dob-select" id="editDobMonth"><option value="">월</option></select>
+          <select class="edit-dob-select" id="editDobDay"><option value="">일</option></select>
+        </div>
+      </div>
+
+      <!-- 전화번호 -->
+      <div class="edit-form-row">
+        <label class="edit-form-label" for="editPhone">휴대폰 번호</label>
+        <div class="edit-phone-wrap">
+          <input class="edit-form-input" id="editPhone" type="tel" placeholder="010-0000-0000" maxlength="13" autocomplete="off">
+          <button class="edit-verify-btn" id="editSendOtpBtn" onclick="editSendOtp()">인증번호 발송</button>
+        </div>
+        <div class="edit-otp-row" id="editOtpRow">
+          <input class="edit-otp-input" id="editOtpInput" type="text" maxlength="6" placeholder="· · · · · ·" inputmode="numeric">
+          <span class="edit-otp-timer" id="editOtpTimer"></span>
+          <button class="edit-otp-confirm" onclick="editConfirmOtp()">확인</button>
+        </div>
+      </div>
+
+      <!-- 이메일 -->
+      <div class="edit-form-row">
+        <label class="edit-form-label" for="editEmail">이메일</label>
+        <input class="edit-form-input" id="editEmail" type="email" readonly>
+        <p class="edit-readonly-note">소셜 로그인 이메일은 변경할 수 없습니다</p>
+      </div>
+
+      <!-- 저장 버튼 -->
+      <button class="edit-save-btn" id="editSaveBtn" onclick="editSaveProfile()">변경사항 저장</button>
+    </div>
+
+  </div><!-- /panel-views -->
 </div>
+
+<!-- 패널 토스트 -->
+<div class="panel-toast" id="panelToast"></div>
 
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -1836,54 +2128,277 @@
     if (error) alert('로그인 중 오류가 발생했습니다: ' + error.message);
   }
 
-  // 로그인 상태 감지 및 UI 업데이트
-  _supabase.auth.onAuthStateChange((event, session) => {
+  /* ── 패널 토스트 ── */
+  function showPanelToast(msg, ms = 2400) {
+    const t = document.getElementById('panelToast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), ms);
+  }
+
+  /* ── 랜덤 아바타 배정 ── */
+  const AVATAR_LIST = ['avatar/avatar_1.png', 'avatar/avatar_2.png'];
+
+  async function assignAvatarIfNeeded(user) {
+    const meta = user.user_metadata || {};
+    if (meta.avatar_url) return user;
+    const picked = AVATAR_LIST[Math.floor(Math.random() * AVATAR_LIST.length)];
+    const { data, error } = await _supabase.auth.updateUser({
+      data: { ...meta, avatar_url: picked }
+    });
+    if (!error && data?.user) return data.user;
+    return user;
+  }
+
+  /* ── 로그인 상태 감지 및 마이페이지 UI 업데이트 ── */
+  let _currentUser = null;
+
+  function renderMypage(user) {
+    _currentUser = user;
+    const meta = user.user_metadata || {};
+    const name = meta.name || meta.full_name || user.email || '회원';
+    const avatarUrl = meta.avatar_url || '';
+
+    document.getElementById('panelTitle').textContent = '마이페이지';
+    document.getElementById('loginArea').style.display = 'none';
+    document.getElementById('mypageArea').style.display = 'block';
+    document.getElementById('mypageArea').innerHTML = `
+      <div style="text-align:center;padding:20px 0 18px;border-bottom:1px solid #e8e0d4;margin:0 -28px;">
+        <div style="width:56px;height:56px;border-radius:50%;background:#1a1209;border:2px solid #c8b89a;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;overflow:hidden;">
+          ${avatarUrl ? `<img src="${avatarUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">` : '🪬'}
+        </div>
+        <div style="font-size:12px;color:#7a6a5a;margin-bottom:3px;">환영합니다</div>
+        <div style="font-size:15px;color:#2a1f14;font-weight:500;">${name}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0;margin-top:8px;">
+        <button onclick="openEditView()" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:18px;">👤</span> 회원정보 수정
+        </button>
+        <button onclick="window.location.href='payment.html'" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:18px;">💰</span> 충전하기
+        </button>
+        <button onclick="alert('준비 중입니다.')" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:18px;">📋</span> 내 충전 내역
+        </button>
+        <button onclick="alert('준비 중입니다.')" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
+          <span style="font-size:18px;">📢</span> 공지사항
+        </button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px;">
+        <button onclick="logout()" style="width:100%;padding:12px;background:#2a1f14;color:#fff;border:none;border-radius:6px;font-size:14px;font-family:'Noto Serif KR',serif;letter-spacing:0.06em;cursor:pointer;">로그아웃</button>
+        <button onclick="deleteAccount()" style="width:100%;padding:12px;background:none;color:#aaa;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:'Noto Serif KR',serif;cursor:pointer;">탈퇴하기</button>
+      </div>
+    `;
+  }
+
+  _supabase.auth.onAuthStateChange(async (event, session) => {
     if (session && session.user) {
-      const user = session.user;
-      const name = user.user_metadata?.name || user.user_metadata?.full_name || user.email;
-      document.getElementById('sidePanel').innerHTML = `
-        <button class="panel-close" onclick="closePanel()">&#215;</button>
-        <h2 style="font-family:'Noto Serif KR',serif;font-size:18px;font-weight:400;color:#c8b89a;text-align:center;letter-spacing:0.2em;background-color:#1a1209;margin:-40px -28px 0;padding:28px 28px 22px;border-bottom:1px solid #3a2e1a;">마이페이지</h2>
-
-        <!-- 프로필 -->
-        <div style="text-align:center;padding:24px 0 20px;border-bottom:1px solid #e8e0d4;">
-          <div style="width:56px;height:56px;border-radius:50%;background:#1a1209;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:22px;">🪬</div>
-          <div style="font-size:13px;color:#7a6a5a;margin-bottom:4px;">환영합니다</div>
-          <div style="font-size:16px;color:#2a1f14;font-weight:500;">${name}</div>
-        </div>
-
-        <!-- 메뉴 목록 -->
-        <div style="display:flex;flex-direction:column;gap:0;margin-top:8px;">
-          <button onclick="alert('준비 중입니다.')" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:18px;">👤</span> 회원정보 수정
-          </button>
-          <button onclick="window.location.href='payment.html'" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:18px;">💰</span> 충전하기
-          </button>
-          <button onclick="alert('준비 중입니다.')" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:18px;">📋</span> 내 충전 내역
-          </button>
-          <button onclick="alert('준비 중입니다.')" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:18px;">📢</span> 공지사항
-          </button>
-        </div>
-
-        <!-- 하단 버튼 -->
-        <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px;">
-          <button onclick="logout()" style="width:100%;padding:12px;background:#2a1f14;color:#fff;border:none;border-radius:6px;font-size:14px;font-family:'Noto Serif KR',serif;letter-spacing:0.06em;cursor:pointer;">로그아웃</button>
-          <button onclick="deleteAccount()" style="width:100%;padding:12px;background:none;color:#aaa;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:'Noto Serif KR',serif;cursor:pointer;">탈퇴하기</button>
-        </div>
-      `;
+      const user = await assignAvatarIfNeeded(session.user);
+      renderMypage(user);
     }
   });
 
-  // 로그아웃
+  /* ── 회원정보 수정 뷰 열기/닫기 ── */
+  function openEditView() {
+    initEditForm(_currentUser);
+    document.getElementById('panelViews').classList.add('show-edit');
+    document.getElementById('panelViewEdit').scrollTop = 0;
+  }
+  function closeEditView() {
+    document.getElementById('panelViews').classList.remove('show-edit');
+  }
+
+  /* ── 생년월일 select 초기화 ── */
+  function initEditDobSelects(birthday) {
+    const yearEl = document.getElementById('editDobYear');
+    const monthEl = document.getElementById('editDobMonth');
+    const dayEl = document.getElementById('editDobDay');
+
+    if (yearEl.options.length <= 1) {
+      const curYear = new Date().getFullYear();
+      for (let y = curYear; y >= 1930; y--) {
+        yearEl.innerHTML += `<option value="${y}">${y}년</option>`;
+      }
+      for (let m = 1; m <= 12; m++) {
+        monthEl.innerHTML += `<option value="${String(m).padStart(2,'0')}">${m}월</option>`;
+      }
+    }
+
+    function updateDays() {
+      const y = yearEl.value || new Date().getFullYear();
+      const mo = monthEl.value || 1;
+      const maxDay = new Date(y, mo, 0).getDate();
+      const prev = dayEl.value;
+      dayEl.innerHTML = '<option value="">일</option>';
+      for (let d = 1; d <= maxDay; d++) {
+        dayEl.innerHTML += `<option value="${String(d).padStart(2,'0')}">${d}일</option>`;
+      }
+      if (prev && Number(prev) <= maxDay) dayEl.value = prev;
+    }
+
+    yearEl.onchange = updateDays;
+    monthEl.onchange = updateDays;
+    updateDays();
+
+    if (birthday) {
+      const [y, m, d] = birthday.split('-');
+      yearEl.value = y || '';
+      monthEl.value = m || '';
+      updateDays();
+      dayEl.value = d || '';
+    }
+  }
+
+  /* ── 수정 폼 기존 정보 채우기 ── */
+  function initEditForm(user) {
+    if (!user) return;
+    const meta = user.user_metadata || {};
+
+    document.getElementById('editName').value = meta.name || meta.full_name || '';
+    document.getElementById('editEmail').value = user.email || '';
+    document.getElementById('editPhone').value = meta.phone || '';
+
+    initEditDobSelects(meta.birthday || '');
+
+    // 인증 상태 초기화
+    _editPhoneVerified = false;
+    clearEditOtpTimer();
+    document.getElementById('editOtpRow').classList.remove('visible');
+    document.getElementById('editSendOtpBtn').disabled = false;
+    document.getElementById('editSendOtpBtn').textContent = '인증번호 발송';
+    document.getElementById('editSendOtpBtn').style.background = '';
+  }
+
+  /* ── 전화번호 하이픈 ── */
+  document.getElementById('editPhone').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length >= 8) v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
+    else if (v.length >= 4) v = v.slice(0,3) + '-' + v.slice(3);
+    this.value = v;
+    _editPhoneVerified = false;
+    clearEditOtpTimer();
+    document.getElementById('editOtpRow').classList.remove('visible');
+    document.getElementById('editSendOtpBtn').disabled = false;
+    document.getElementById('editSendOtpBtn').textContent = '인증번호 발송';
+    document.getElementById('editSendOtpBtn').style.background = '';
+  });
+
+  /* ── OTP 발송 ── */
+  let _editPhoneVerified = false;
+  let _editOtpInterval = null;
+
+  async function editSendOtp() {
+    const phone = document.getElementById('editPhone').value.replace(/-/g, '');
+    if (!/^01[0-9]{8,9}$/.test(phone)) {
+      showPanelToast('올바른 휴대폰 번호를 입력해 주세요'); return;
+    }
+    const intlPhone = '+82' + phone.slice(1);
+    const { error } = await _supabase.auth.signInWithOtp({ phone: intlPhone });
+    if (error) { showPanelToast('발송에 실패했습니다. 잠시 후 다시 시도해 주세요.'); return; }
+    document.getElementById('editOtpRow').classList.add('visible');
+    document.getElementById('editSendOtpBtn').disabled = true;
+    document.getElementById('editSendOtpBtn').textContent = '재발송(3분)';
+    startEditOtpTimer(180);
+    showPanelToast('인증번호를 발송했습니다');
+  }
+
+  function startEditOtpTimer(sec) {
+    clearEditOtpTimer();
+    const el = document.getElementById('editOtpTimer');
+    let remain = sec;
+    el.textContent = fmtTime(remain);
+    _editOtpInterval = setInterval(() => {
+      remain--;
+      el.textContent = fmtTime(remain);
+      if (remain <= 0) {
+        clearEditOtpTimer();
+        el.textContent = '만료';
+        document.getElementById('editSendOtpBtn').disabled = false;
+        document.getElementById('editSendOtpBtn').textContent = '재발송';
+      }
+    }, 1000);
+  }
+  function clearEditOtpTimer() {
+    if (_editOtpInterval) { clearInterval(_editOtpInterval); _editOtpInterval = null; }
+    const el = document.getElementById('editOtpTimer');
+    if (el) el.textContent = '';
+  }
+  function fmtTime(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
+
+  async function editConfirmOtp() {
+    const phone = document.getElementById('editPhone').value.replace(/-/g, '');
+    const otp = document.getElementById('editOtpInput').value.trim();
+    if (otp.length !== 6) { showPanelToast('인증번호 6자리를 입력해 주세요'); return; }
+    const intlPhone = '+82' + phone.slice(1);
+    const { error } = await _supabase.auth.verifyOtp({ phone: intlPhone, token: otp, type: 'sms' });
+    if (error) { showPanelToast('인증번호가 올바르지 않습니다'); return; }
+    _editPhoneVerified = true;
+    clearEditOtpTimer();
+    document.getElementById('editOtpRow').classList.remove('visible');
+    document.getElementById('editSendOtpBtn').textContent = '✓ 인증완료';
+    document.getElementById('editSendOtpBtn').disabled = true;
+    document.getElementById('editSendOtpBtn').style.background = '#3a7d44';
+    showPanelToast('휴대폰 인증 완료 ✓');
+  }
+
+
+
+  /* ── 저장 ── */
+  async function editSaveProfile() {
+    if (!_currentUser) return;
+    const name = document.getElementById('editName').value.trim();
+    const y = document.getElementById('editDobYear').value;
+    const m = document.getElementById('editDobMonth').value;
+    const d = document.getElementById('editDobDay').value;
+    const phone = document.getElementById('editPhone').value.trim();
+
+    if (!name) { showPanelToast('이름 또는 닉네임을 입력해 주세요'); return; }
+
+    const phoneFilled = phone.replace(/-/g,'').length >= 10;
+    if (phoneFilled && !_editPhoneVerified) {
+      const meta = _currentUser.user_metadata || {};
+      const prevPhone = (meta.phone || '').replace(/-/g,'');
+      if (phone.replace(/-/g,'') !== prevPhone) {
+        showPanelToast('변경된 번호는 인증이 필요합니다'); return;
+      }
+    }
+
+    const btn = document.getElementById('editSaveBtn');
+    btn.disabled = true;
+    btn.textContent = '저장 중…';
+
+    const avatarUrl = _currentUser.user_metadata?.avatar_url || null;
+
+    const newMeta = {
+      name,
+      full_name: name,
+      avatar_url: avatarUrl,
+      phone: phoneFilled ? phone : (_currentUser.user_metadata?.phone || ''),
+      birthday: (y && m && d) ? `${y}-${m}-${d}` : (_currentUser.user_metadata?.birthday || ''),
+    };
+
+    const { data, error } = await _supabase.auth.updateUser({ data: newMeta });
+
+    btn.disabled = false;
+    btn.textContent = '변경사항 저장';
+
+    if (error) { showPanelToast('저장에 실패했습니다. 다시 시도해 주세요.'); return; }
+
+    _currentUser = data.user;
+    showPanelToast('저장되었습니다 ✓');
+    setTimeout(() => {
+      closeEditView();
+      renderMypage(_currentUser);
+    }, 1200);
+  }
+
+  /* ── 로그아웃 / 탈퇴 ── */
   async function logout() {
     await _supabase.auth.signOut();
     window.location.reload();
   }
 
-  // 탈퇴하기
   async function deleteAccount() {
     if (!confirm('정말 탈퇴하시겠습니까?\n탈퇴 시 모든 정보가 삭제되며 복구가 불가능합니다.')) return;
     alert('탈퇴 기능은 준비 중입니다. 고객센터로 문의해 주세요.\n070-8027-4898');

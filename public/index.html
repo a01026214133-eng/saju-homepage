@@ -128,6 +128,31 @@
     }
 
     /* 회원정보 수정 뷰 전용 스타일 */
+    .edit-mode-btn {
+      margin-left: auto;
+      background: none;
+      border: 1px solid #c8b89a;
+      color: #c8b89a;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      padding: 5px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      flex-shrink: 0;
+    }
+    .edit-mode-btn:hover { background: rgba(200,184,154,0.15); }
+    .edit-mode-btn.cancel { border-color: #aaa; color: #aaa; }
+    .edit-mode-btn.cancel:hover { background: rgba(0,0,0,0.05); }
+    /* 조회 모드일 때 입력 필드 스타일 */
+    .edit-form-input.view-mode,
+    .edit-dob-select.view-mode {
+      pointer-events: none;
+      color: #2a1f14;
+      opacity: 1;
+    }
+    .edit-phone-wrap .edit-verify-btn { transition: opacity 0.2s; }
     .edit-header {
       display: flex;
       align-items: center;
@@ -2052,7 +2077,8 @@
       <!-- 수정 헤더 -->
       <div class="edit-header">
         <button class="edit-back-btn" onclick="closeEditView()">&#8592;</button>
-        <span>회원정보 수정</span>
+        <span>회원정보</span>
+        <button class="edit-mode-btn" id="editModeBtn" onclick="toggleEditMode()">수정</button>
       </div>
 
 
@@ -2076,15 +2102,7 @@
       <!-- 전화번호 -->
       <div class="edit-form-row">
         <label class="edit-form-label" for="editPhone">휴대폰 번호</label>
-        <div class="edit-phone-wrap">
-          <input class="edit-form-input" id="editPhone" type="tel" placeholder="010-0000-0000" maxlength="13" autocomplete="off">
-          <button class="edit-verify-btn" id="editSendOtpBtn" onclick="editSendOtp()">인증번호 발송</button>
-        </div>
-        <div class="edit-otp-row" id="editOtpRow">
-          <input class="edit-otp-input" id="editOtpInput" type="text" maxlength="6" placeholder="· · · · · ·" inputmode="numeric">
-          <span class="edit-otp-timer" id="editOtpTimer"></span>
-          <button class="edit-otp-confirm" onclick="editConfirmOtp()">확인</button>
-        </div>
+        <input class="edit-form-input" id="editPhone" type="tel" placeholder="010-0000-0000" maxlength="13" autocomplete="off">
       </div>
 
       <!-- 이메일 -->
@@ -2094,8 +2112,11 @@
         <p class="edit-readonly-note">소셜 로그인 이메일은 변경할 수 없습니다</p>
       </div>
 
-      <!-- 저장 버튼 -->
-      <button class="edit-save-btn" id="editSaveBtn" onclick="editSaveProfile()">변경사항 저장</button>
+      <!-- 저장/취소 버튼 -->
+      <div id="editActionBtns" style="display:none;">
+        <button class="edit-save-btn" id="editSaveBtn" onclick="editSaveProfile()">변경사항 저장</button>
+        <button class="edit-save-btn" id="editCancelBtn" onclick="cancelEditMode()" style="margin-top:8px;background:#f5f0e8;color:#7a6a5a;border:1px solid #ddd;">취소</button>
+      </div>
     </div>
 
   </div><!-- /panel-views -->
@@ -2172,7 +2193,7 @@
       </div>
       <div style="display:flex;flex-direction:column;gap:0;margin-top:8px;">
         <button onclick="openEditView()" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
-          <span style="font-size:18px;">👤</span> 회원정보 수정
+          <span style="font-size:18px;">👤</span> 회원정보
         </button>
         <button onclick="window.location.href='payment.html'" style="width:100%;padding:15px 4px;background:none;border:none;border-bottom:1px solid #f0ebe3;font-family:'Noto Serif KR',serif;font-size:14px;color:#2a1f14;text-align:left;cursor:pointer;display:flex;align-items:center;gap:12px;">
           <span style="font-size:18px;">💰</span> 충전하기
@@ -2260,13 +2281,61 @@
 
     initEditDobSelects(meta.birthday || '');
 
-    // 인증 상태 초기화
-    _editPhoneVerified = false;
-    clearEditOtpTimer();
-    document.getElementById('editOtpRow').classList.remove('visible');
-    document.getElementById('editSendOtpBtn').disabled = false;
-    document.getElementById('editSendOtpBtn').textContent = '인증번호 발송';
-    document.getElementById('editSendOtpBtn').style.background = '';
+    // 조회 모드로 시작
+    setViewMode(true);
+  }
+
+  /* ── 조회/수정 모드 전환 ── */
+  let _isViewMode = true;
+
+  function setViewMode(isView) {
+    _isViewMode = isView;
+    const fields = ['editName', 'editPhone'];
+    const selects = ['editDobYear', 'editDobMonth', 'editDobDay'];
+    const btn = document.getElementById('editModeBtn');
+    const actionBtns = document.getElementById('editActionBtns');
+
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (isView) {
+        el.setAttribute('readonly', true);
+        el.classList.add('view-mode');
+      } else {
+        if (id !== 'editEmail') el.removeAttribute('readonly');
+        el.classList.remove('view-mode');
+      }
+    });
+
+    selects.forEach(id => {
+      const el = document.getElementById(id);
+      el.disabled = isView;
+      if (isView) el.classList.add('view-mode');
+      else el.classList.remove('view-mode');
+    });
+
+    // 저장/취소 버튼
+    actionBtns.style.display = isView ? 'none' : '';
+
+    // 헤더 버튼
+    if (isView) {
+      btn.textContent = '수정';
+      btn.classList.remove('cancel');
+    } else {
+      btn.textContent = '취소';
+      btn.classList.add('cancel');
+    }
+  }
+
+  function toggleEditMode() {
+    if (_isViewMode) {
+      setViewMode(false);
+    } else {
+      cancelEditMode();
+    }
+  }
+
+  function cancelEditMode() {
+    initEditForm(_currentUser);
   }
 
   /* ── 전화번호 하이픈 ── */
@@ -2276,71 +2345,7 @@
     if (v.length >= 8) v = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
     else if (v.length >= 4) v = v.slice(0,3) + '-' + v.slice(3);
     this.value = v;
-    _editPhoneVerified = false;
-    clearEditOtpTimer();
-    document.getElementById('editOtpRow').classList.remove('visible');
-    document.getElementById('editSendOtpBtn').disabled = false;
-    document.getElementById('editSendOtpBtn').textContent = '인증번호 발송';
-    document.getElementById('editSendOtpBtn').style.background = '';
   });
-
-  /* ── OTP 발송 ── */
-  let _editPhoneVerified = false;
-  let _editOtpInterval = null;
-
-  async function editSendOtp() {
-    const phone = document.getElementById('editPhone').value.replace(/-/g, '');
-    if (!/^01[0-9]{8,9}$/.test(phone)) {
-      showPanelToast('올바른 휴대폰 번호를 입력해 주세요'); return;
-    }
-    const intlPhone = '+82' + phone.slice(1);
-    const { error } = await _supabase.auth.signInWithOtp({ phone: intlPhone });
-    if (error) { showPanelToast('발송에 실패했습니다. 잠시 후 다시 시도해 주세요.'); return; }
-    document.getElementById('editOtpRow').classList.add('visible');
-    document.getElementById('editSendOtpBtn').disabled = true;
-    document.getElementById('editSendOtpBtn').textContent = '재발송(3분)';
-    startEditOtpTimer(180);
-    showPanelToast('인증번호를 발송했습니다');
-  }
-
-  function startEditOtpTimer(sec) {
-    clearEditOtpTimer();
-    const el = document.getElementById('editOtpTimer');
-    let remain = sec;
-    el.textContent = fmtTime(remain);
-    _editOtpInterval = setInterval(() => {
-      remain--;
-      el.textContent = fmtTime(remain);
-      if (remain <= 0) {
-        clearEditOtpTimer();
-        el.textContent = '만료';
-        document.getElementById('editSendOtpBtn').disabled = false;
-        document.getElementById('editSendOtpBtn').textContent = '재발송';
-      }
-    }, 1000);
-  }
-  function clearEditOtpTimer() {
-    if (_editOtpInterval) { clearInterval(_editOtpInterval); _editOtpInterval = null; }
-    const el = document.getElementById('editOtpTimer');
-    if (el) el.textContent = '';
-  }
-  function fmtTime(s) { return Math.floor(s/60) + ':' + String(s%60).padStart(2,'0'); }
-
-  async function editConfirmOtp() {
-    const phone = document.getElementById('editPhone').value.replace(/-/g, '');
-    const otp = document.getElementById('editOtpInput').value.trim();
-    if (otp.length !== 6) { showPanelToast('인증번호 6자리를 입력해 주세요'); return; }
-    const intlPhone = '+82' + phone.slice(1);
-    const { error } = await _supabase.auth.verifyOtp({ phone: intlPhone, token: otp, type: 'sms' });
-    if (error) { showPanelToast('인증번호가 올바르지 않습니다'); return; }
-    _editPhoneVerified = true;
-    clearEditOtpTimer();
-    document.getElementById('editOtpRow').classList.remove('visible');
-    document.getElementById('editSendOtpBtn').textContent = '✓ 인증완료';
-    document.getElementById('editSendOtpBtn').disabled = true;
-    document.getElementById('editSendOtpBtn').style.background = '#3a7d44';
-    showPanelToast('휴대폰 인증 완료 ✓');
-  }
 
 
 
@@ -2354,15 +2359,6 @@
     const phone = document.getElementById('editPhone').value.trim();
 
     if (!name) { showPanelToast('이름 또는 닉네임을 입력해 주세요'); return; }
-
-    const phoneFilled = phone.replace(/-/g,'').length >= 10;
-    if (phoneFilled && !_editPhoneVerified) {
-      const meta = _currentUser.user_metadata || {};
-      const prevPhone = (meta.phone || '').replace(/-/g,'');
-      if (phone.replace(/-/g,'') !== prevPhone) {
-        showPanelToast('변경된 번호는 인증이 필요합니다'); return;
-      }
-    }
 
     const btn = document.getElementById('editSaveBtn');
     btn.disabled = true;
@@ -2388,7 +2384,7 @@
     _currentUser = data.user;
     showPanelToast('저장되었습니다 ✓');
     setTimeout(() => {
-      closeEditView();
+      initEditForm(_currentUser); // 조회 모드로 복귀
       renderMypage(_currentUser);
     }, 1200);
   }

@@ -179,7 +179,7 @@
     /* 결제 수단 */
     .pay-methods {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 0.6rem;
       margin-bottom: 1.6rem;
     }
@@ -199,8 +199,7 @@
     }
     .pay-btn.kakao-btn { background: #fff; border-color: #e0d8ce; }
     .pay-btn.kakao-btn.selected { background: #fdf6ee; border-color: #8B1A1A; box-shadow: 0 2px 10px rgba(139,26,26,0.12); }
-    .pay-btn.naver-btn { background: #fff; border-color: #e0d8ce; }
-    .pay-btn.naver-btn.selected { background: #f0fdf4; border-color: #03C75A; box-shadow: 0 2px 10px rgba(3,199,90,0.2); }
+
     .pay-btn.toss-btn { background: #fff; border-color: #e0d8ce; }
     .pay-btn.toss-btn.selected { background: #eff6ff; border-color: #0064FF; box-shadow: 0 2px 10px rgba(0,100,255,0.2); }
     /* 결제 버튼 내부 — 모든 버튼 동일 구조 */
@@ -227,20 +226,7 @@
       color: #555;
       line-height: 1;
     }
-    /* 네이버 N 박스 */
-    .naver-n {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px; height: 22px;
-      background: #03C75A;
-      border-radius: 4px;
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      font-weight: 900;
-      font-size: 15px;
-      color: #fff;
-      line-height: 1;
-    }
+
 
     /* 요약 박스 - 카드 스타일 */
     .summary-box {
@@ -437,13 +423,7 @@
         <span class="pay-label" style="font-family:'Helvetica Neue',Arial,sans-serif; font-weight:800; color:#3C1E1E;">kakaopay</span>
       </button>
 
-      <!-- 네이버페이 -->
-      <button class="pay-btn naver-btn" onclick="selectPay(this, '네이버페이')">
-        <span class="pay-symbol">
-          <span class="naver-n">N</span>
-        </span>
-        <span class="pay-label" style="font-family:'Helvetica Neue',Arial,sans-serif; font-weight:700; color:#03C75A;">Pay</span>
-      </button>
+
 
       <!-- 토스 -->
       <button class="pay-btn toss-btn" onclick="selectPay(this, '토스')">

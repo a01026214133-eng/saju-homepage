@@ -1031,7 +1031,7 @@
   <div class="yeon-section" id="yeonSection">
     <div class="rec-section-header">
       <span class="rec-section-title">서로의 사랑을 알아보자! , 인연북</span>
-      <a href="javascript:void(0)" onclick="openPage('인연복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPageAuth('인연복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="yeonOuter">
       <div class="yeon-track" id="yeonTrack">
@@ -1104,7 +1104,7 @@
   <div class="yeon-section" id="jaeSection">
     <div class="rec-section-header">
       <span class="rec-section-title">재물복을 알아보자! , 재물북</span>
-      <a href="javascript:void(0)" onclick="openPage('재물복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPageAuth('재물복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="jaeOuter">
       <div class="yeon-track" id="jaeTrack">
@@ -1177,7 +1177,7 @@
   <div class="yeon-section" id="gaSection">
     <div class="rec-section-header">
       <span class="rec-section-title">가정복을 알아보자! , 가정북</span>
-      <a href="javascript:void(0)" onclick="openPage('가정복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPageAuth('가정복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="gaOuter">
       <div class="yeon-track" id="gaTrack">
@@ -1250,7 +1250,7 @@
   <div class="yeon-section" id="seongSection">
     <div class="rec-section-header">
       <span class="rec-section-title">성공복을 알아보자! , 성공북</span>
-      <a href="javascript:void(0)" onclick="openPage('성공복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPageAuth('성공복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="seongOuter">
       <div class="yeon-track" id="seongTrack">
@@ -1323,7 +1323,7 @@
   <div class="yeon-section" id="gunSection">
     <div class="rec-section-header">
       <span class="rec-section-title">건강복을 알아보자! , 건강북</span>
-      <a href="javascript:void(0)" onclick="openPage('건강복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPageAuth('건강복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="gunOuter">
       <div class="yeon-track" id="gunTrack">
@@ -2309,13 +2309,7 @@
         closePanel();
         // 약간의 딜레이 후 페이지 전환 (패널 닫히는 애니메이션 후)
         setTimeout(function() {
-          var wrap = document.getElementById('cardnews-' + pendingId);
-          if (wrap) {
-            document.querySelectorAll('.cardnews-wrap').forEach(function(w){ w.classList.remove('active'); });
-            setMainVisible(false);
-            wrap.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
+          _doOpenPage(pendingId);
         }, 350);
       }
     }
@@ -2578,19 +2572,28 @@
     }
   }
 
-  // 메뉴 클릭 → 카드 화면 전환 (로그인 체크 포함)
-  function openPage(id) {
-    // 로그인 여부 확인
-    if (!_currentUser) {
-      showLoginRequiredModal(id);
-      return;
-    }
+  // 공통: 실제 페이지 전환
+  function _doOpenPage(id) {
     var wrap = document.getElementById('cardnews-' + id);
     if (!wrap) return;
     document.querySelectorAll('.cardnews-wrap').forEach(function(w){ w.classList.remove('active'); });
     setMainVisible(false);
     wrap.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 상단 메뉴 그리드 → 로그인 없이 자유 접근
+  function openPage(id) {
+    _doOpenPage(id);
+  }
+
+  // 하단 슬라이더 "전체 보기" 등 → 로그인 필요
+  function openPageAuth(id) {
+    if (!_currentUser) {
+      showLoginRequiredModal(id);
+      return;
+    }
+    _doOpenPage(id);
   }
 
   // 로그인 필요 모달 표시

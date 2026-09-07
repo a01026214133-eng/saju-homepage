@@ -1031,7 +1031,7 @@
   <div class="yeon-section" id="yeonSection">
     <div class="rec-section-header">
       <span class="rec-section-title">서로의 사랑을 알아보자! , 인연북</span>
-      <a href="javascript:void(0)" onclick="openPageAuth('인연복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPage('인연복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="yeonOuter">
       <div class="yeon-track" id="yeonTrack">
@@ -1104,7 +1104,7 @@
   <div class="yeon-section" id="jaeSection">
     <div class="rec-section-header">
       <span class="rec-section-title">재물복을 알아보자! , 재물북</span>
-      <a href="javascript:void(0)" onclick="openPageAuth('재물복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPage('재물복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="jaeOuter">
       <div class="yeon-track" id="jaeTrack">
@@ -1177,7 +1177,7 @@
   <div class="yeon-section" id="gaSection">
     <div class="rec-section-header">
       <span class="rec-section-title">가정복을 알아보자! , 가정북</span>
-      <a href="javascript:void(0)" onclick="openPageAuth('가정복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPage('가정복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="gaOuter">
       <div class="yeon-track" id="gaTrack">
@@ -1250,7 +1250,7 @@
   <div class="yeon-section" id="seongSection">
     <div class="rec-section-header">
       <span class="rec-section-title">성공복을 알아보자! , 성공북</span>
-      <a href="javascript:void(0)" onclick="openPageAuth('성공복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPage('성공복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="seongOuter">
       <div class="yeon-track" id="seongTrack">
@@ -1323,7 +1323,7 @@
   <div class="yeon-section" id="gunSection">
     <div class="rec-section-header">
       <span class="rec-section-title">건강복을 알아보자! , 건강북</span>
-      <a href="javascript:void(0)" onclick="openPageAuth('건강복')" class="rec-section-more">전체 보기</a>
+      <a href="javascript:void(0)" onclick="openPage('건강복')" class="rec-section-more">전체 보기</a>
     </div>
     <div class="slider-outer" id="gunOuter">
       <div class="yeon-track" id="gunTrack">
@@ -1398,7 +1398,7 @@
 
 
   <div class="cardnews-wrap" id="cardnews-인연복">
-    <a href="https://www.obsd-reuniontest.co.kr/" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+    <a href="javascript:void(0)" onclick="openAuthLink('https://www.obsd-reuniontest.co.kr/')" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
 <div class="card-img" style="padding:0; overflow:hidden;"><img src="images/image_13.png" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
       <div class="card-body">
@@ -1436,7 +1436,7 @@
     </a>
   </div>
   <div class="cardnews-wrap" id="cardnews-사주">
-    <a href="https://www.obsd-iljutest.co.kr/" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+    <a href="javascript:void(0)" onclick="openAuthLink('https://www.obsd-iljutest.co.kr/')" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
 <div class="card-img" style="padding:0; overflow:hidden;"><img src="images/image_14.png" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
       <div class="card-body">
@@ -1512,7 +1512,7 @@
     </a>
   </div>
   <div class="cardnews-wrap" id="cardnews-가정복">
-    <a href="https://www.obsd-aistest.co.kr/" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+    <a href="javascript:void(0)" onclick="openAuthLink('https://www.obsd-aistest.co.kr/')" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
 <div class="card-img" style="padding:0; overflow:hidden;"><img src="images/image_16.png" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
       <div class="card-body">
@@ -1524,7 +1524,7 @@
       </div>
     </div>
     </a>
-    <a href="pregnancy-fortune.html" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+    <a href="javascript:void(0)" onclick="openAuthLink('pregnancy-fortune.html')" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
 <div class="card-img" style="padding:0; overflow:hidden;"><img src="images/image_17.jpg" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
       <div class="card-body">
@@ -1536,7 +1536,7 @@
       </div>
     </div>
     </a>
-    <a href="saju_jashik.html" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+    <a href="javascript:void(0)" onclick="openAuthLink('saju_jashik.html')" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
 <div class="card-img" style="padding:0; overflow:hidden;"><img src="images/image_18.jpg" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
       <div class="card-body">
@@ -2301,16 +2301,23 @@
       const user = await assignAvatarIfNeeded(session.user);
       renderMypage(user);
 
-      // 로그인 후 대기 중인 페이지가 있으면 이동
+      // 로그인 후 대기 중인 항목 처리
       var modal = document.getElementById('loginRequiredModal');
-      if (modal && modal.dataset.pendingPage) {
-        var pendingId = modal.dataset.pendingPage;
-        closeLoginRequiredModal();
-        closePanel();
-        // 약간의 딜레이 후 페이지 전환 (패널 닫히는 애니메이션 후)
-        setTimeout(function() {
-          _doOpenPage(pendingId);
-        }, 350);
+      if (modal) {
+        var pendingId  = modal.dataset.pendingPage || '';
+        var pendingUrl = modal.dataset.pendingUrl  || '';
+        if (pendingId || pendingUrl) {
+          closeLoginRequiredModal();
+          closePanel();
+          setTimeout(function() {
+            if (pendingUrl) {
+              window.open(pendingUrl, '_blank');
+              modal.dataset.pendingUrl = '';
+            } else if (pendingId) {
+              _doOpenPage(pendingId);
+            }
+          }, 350);
+        }
       }
     }
   });
@@ -2594,6 +2601,18 @@
       return;
     }
     _doOpenPage(id);
+  }
+
+  // 외부/내부 링크 클릭 시 로그인 체크 후 이동
+  function openAuthLink(url) {
+    if (!_currentUser) {
+      // 로그인 후 이동할 URL 저장
+      var modal = document.getElementById('loginRequiredModal');
+      if (modal) modal.dataset.pendingUrl = url;
+      showLoginRequiredModal('');
+      return;
+    }
+    window.open(url, '_blank');
   }
 
   // 로그인 필요 모달 표시

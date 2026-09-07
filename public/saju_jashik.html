@@ -603,69 +603,23 @@ body {
 
 /* ── 임신운 링크 카드 ── */
 .preg-link-card {
-  position: relative;
-  border-radius: 20px;
+  display: block;
+  border-radius: 16px;
   overflow: hidden;
   margin: 0;
-  border: 1px solid rgba(200,140,160,.3);
+  border: none;
   text-decoration: none;
-  display: block;
   opacity: 0; transform: translateY(14px);
   transition: opacity .5s ease .15s, transform .5s ease .15s;
 }
 .preg-link-card.visible { opacity: 1; transform: translateY(0); }
 .preg-link-card img {
   width: 100%;
-  height: 150px;
   display: block;
   object-fit: cover;
-  object-position: center top;
-  filter: brightness(.72);
+  border-radius: 16px;
 }
-.preg-link-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(15,5,25,.92) 0%, rgba(15,5,25,.5) 45%, transparent 100%);
-  display: flex; flex-direction: column;
-  justify-content: flex-end;
-  padding: 14px 16px 14px;
-}
-.preg-link-badge {
-  display: inline-block;
-  background: rgba(232,168,64,.18);
-  border: 1px solid rgba(232,168,64,.35);
-  border-radius: 20px;
-  padding: 3px 10px;
-  font-size: .6rem; letter-spacing: .12em;
-  color: #F5C86A;
-  margin-bottom: 5px;
-  width: fit-content;
-}
-.preg-link-title {
-  font-family: 'Noto Serif KR', serif;
-  font-size: .88rem; font-weight: 700;
-  color: #F5E8D0;
-  line-height: 1.4;
-  margin-bottom: 4px;
-}
-.preg-link-title em { font-style:normal; color:#F4A0B8; }
-.preg-link-desc {
-  font-size: .65rem;
-  color: rgba(212,184,150,.85);
-  line-height: 1.6;
-  margin-bottom: 8px;
-}
-.preg-link-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: linear-gradient(135deg,#C75E7E,#E8789A);
-  border: none; border-radius: 30px;
-  color: #fff;
-  font-family: 'Noto Serif KR', serif;
-  font-size: .7rem; letter-spacing: .04em;
-  padding: 7px 14px;
-  text-decoration: none;
-  width: fit-content;
-}
+.preg-link-card:hover img { filter: brightness(.92); }
 </style>
 </head>
 <body>
@@ -835,13 +789,7 @@ body {
 
   <!-- 임신운 링크 카드 -->
   <a class="preg-link-card" id="preg-link-card" href="pregnancy-fortune.html">
-    <img src="images/image_18.jpg" alt="임신운 알아보기" style="min-height:180px; max-height:220px;">
-    <div class="preg-link-overlay">
-      <div class="preg-link-badge">✦ 오복할머니 추천 ✦</div>
-      <p class="preg-link-title">나는 언제 임신할까?<br><em>오복할머니 임신운 보러가기 →</em></p>
-      <p class="preg-link-desc">임신 시기, 입덧운, 몸의 변화, 순산운까지<br>사주로 미리 보는 나의 임신 시나리오</p>
-      <span class="preg-link-btn">🌕 임신운 확인하기</span>
-    </div>
+    <img src="images/image_17.jpg" alt="임신운 알아보기">
   </a>
 
 </div>
@@ -1393,7 +1341,7 @@ function addChild() {
   const div=document.createElement('div');
   div.className='c-entry'; div.id='child'+id;
   div.innerHTML=`
-    <div class="c-head"><span class="c-num">자녀 ${id}</span><button type="button" class="rm-btn" onclick="removeChild(${id})">삭제</button></div>
+    <div class="c-head"><span class="c-num">자녀 ${id}</span><button type="button" class="rm-btn" onclick="deleteChild(${id})">삭제</button></div>
     <div class="r2">
       <div class="fld"><label>생년월일</label><input type="date" id="cb${id}"></div>
       <div class="fld"><label>시간</label><select id="ch${id}">
@@ -1413,7 +1361,7 @@ function addChild() {
   document.getElementById('childList').appendChild(div);
   document.getElementById('emptyHint').style.display='none';
 }
-function removeChild(id) {
+function deleteChild(id) {
   const el=document.getElementById('child'+id); if(el) el.remove();
   if(!document.querySelectorAll('.c-entry').length) document.getElementById('emptyHint').style.display='block';
 }

@@ -1459,7 +1459,7 @@ function analyzeChild(child, idx, myGender, 이미지맵) {
   const _imgSet = 이미지맵[아이오행]||이미지맵['목'];
   const imgKey = (child.gender||'남자아이')==='여자아이'?'여':'남';
   return {
-    label: `${idx+1}번째 아이`,
+    label: idx===0?'첫째의 경우':idx===1?'둘째의 경우':idx===2?'셋째의 경우':`${idx+1}번째 아이`,
     childPersonality: 성격유형표[아이오행]||성격유형표['목'],
     talents: {fields:[{name:'공부',score:재능.공부},{name:'예술',score:재능.예술},{name:'운동',score:재능.운동},{name:'언어',score:재능.언어},{name:'사업/리더십',score:재능.사업}],topTalent:재능명[최고재능]},
     wealth: {desc:재물표[아이오행]||재물표['목']},
@@ -1474,7 +1474,6 @@ function analyzeChild(child, idx, myGender, 이미지맵) {
 
 function renderChildColumns(key, childResults) {
   const cardType = (CARDS.find(c=>c.key===key)||{}).type||'text';
-  if(childResults.length===1) return renderCardContent({key, type:cardType}, childResults[0]);
   const cols = childResults.map(cr=>`
     <div class="child-col">
       <div class="child-col-label">${cr.label}</div>

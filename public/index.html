@@ -340,6 +340,79 @@
     .edit-save-btn:hover { background: #3a2e22; }
     .edit-save-btn:disabled { background: #ccc; color: #fff; cursor: default; }
 
+    /* 로그인 필요 모달 */
+    .login-required-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+    }
+    .login-required-modal.active {
+      display: flex;
+    }
+    .login-required-box {
+      background: #fff;
+      border-radius: 18px;
+      padding: 36px 28px 28px;
+      width: 300px;
+      max-width: 88vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+      animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes modalPop {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+    .login-required-icon {
+      font-size: 44px;
+      margin-bottom: 14px;
+    }
+    .login-required-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1209;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    .login-required-desc {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13px;
+      color: #7a6a5a;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .login-required-btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 14px;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background 0.18s, opacity 0.18s;
+      margin-bottom: 10px;
+    }
+    .login-required-btn:last-child { margin-bottom: 0; }
+    .login-required-btn.primary {
+      background: #1a1209;
+      color: #c8b89a;
+    }
+    .login-required-btn.primary:hover { background: #3a2e22; }
+    .login-required-btn.secondary {
+      background: #f0ebe3;
+      color: #7a6a5a;
+    }
+    .login-required-btn.secondary:hover { background: #e0d8cc; }
+
     /* 패널 토스트 */
     .panel-toast {
       position: fixed;
@@ -2038,6 +2111,17 @@
 
 </div>
 
+<!-- 로그인 필요 모달 -->
+<div id="loginRequiredModal" class="login-required-modal">
+  <div class="login-required-box">
+    <div class="login-required-icon">🔮</div>
+    <div class="login-required-title">로그인이 필요해요</div>
+    <div class="login-required-desc">카드뉴스를 보려면<br>먼저 로그인해 주세요.</div>
+    <button class="login-required-btn primary" onclick="goToLogin()">로그인 하기</button>
+    <button class="login-required-btn secondary" onclick="closeLoginRequiredModal()">나중에 할게요</button>
+  </div>
+</div>
+
 <!-- 딤 오버레이 -->
 <div class="dim-overlay" id="dimOverlay" onclick="closePanel()"></div>
 <!-- 우측 슬라이드 패널 -->
@@ -2216,6 +2300,24 @@
     if (session && session.user) {
       const user = await assignAvatarIfNeeded(session.user);
       renderMypage(user);
+
+      // 로그인 후 대기 중인 페이지가 있으면 이동
+      var modal = document.getElementById('loginRequiredModal');
+      if (modal && modal.dataset.pendingPage) {
+        var pendingId = modal.dataset.pendingPage;
+        closeLoginRequiredModal();
+        closePanel();
+        // 약간의 딜레이 후 페이지 전환 (패널 닫히는 애니메이션 후)
+        setTimeout(function() {
+          var wrap = document.getElementById('cardnews-' + pendingId);
+          if (wrap) {
+            document.querySelectorAll('.cardnews-wrap').forEach(function(w){ w.classList.remove('active'); });
+            setMainVisible(false);
+            wrap.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }, 350);
+      }
     }
   });
 
@@ -2476,14 +2578,47 @@
     }
   }
 
-  // 메뉴 클릭 → 카드 화면 전환
+  // 메뉴 클릭 → 카드 화면 전환 (로그인 체크 포함)
   function openPage(id) {
+    // 로그인 여부 확인
+    if (!_currentUser) {
+      showLoginRequiredModal(id);
+      return;
+    }
     var wrap = document.getElementById('cardnews-' + id);
     if (!wrap) return;
     document.querySelectorAll('.cardnews-wrap').forEach(function(w){ w.classList.remove('active'); });
     setMainVisible(false);
     wrap.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 로그인 필요 모달 표시
+  function showLoginRequiredModal(pendingPageId) {
+    var modal = document.getElementById('loginRequiredModal');
+    if (!modal) return;
+    modal.dataset.pendingPage = pendingPageId || '';
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // 로그인 필요 모달 닫기
+  function closeLoginRequiredModal() {
+    var modal = document.getElementById('loginRequiredModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    modal.dataset.pendingPage = '';
+  }
+
+  // 모달에서 로그인 버튼 클릭 → 패널 열기
+  function goToLogin() {
+    closeLoginRequiredModal();
+    // 사이드 패널 열기
+    var panel = document.getElementById('sidePanel');
+    var dim = document.getElementById('dimOverlay');
+    if (panel) panel.classList.add('active');
+    if (dim) dim.classList.add('active');
   }
 
 

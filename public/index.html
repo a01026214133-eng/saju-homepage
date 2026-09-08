@@ -2246,13 +2246,17 @@
 
   async function assignAvatarIfNeeded(user) {
     const meta = user.user_metadata || {};
-    if (meta.avatar_url) return user;
+    // 이미 내 커스텀 아이콘이 배정된 경우에만 그대로 유지
+    const isCustomAvatar = AVATAR_LIST.some(a => meta.avatar_url === a);
+    if (isCustomAvatar) return user;
+    // 카톡 프사 등 외부 이미지는 무시하고 커스텀 아이콘으로 덮어쓰기
     const picked = AVATAR_LIST[Math.floor(Math.random() * AVATAR_LIST.length)];
     const { data, error } = await _supabase.auth.updateUser({
       data: { ...meta, avatar_url: picked }
     });
     if (!error && data?.user) return data.user;
-    return user;
+    // updateUser 실패해도 UI에는 커스텀 아바타를 보여주도록 fallback
+    return { ...user, user_metadata: { ...meta, avatar_url: picked } };
   }
 
   /* ── 로그인 상태 감지 및 마이페이지 UI 업데이트 ── */
@@ -2298,7 +2302,12 @@
 
   _supabase.auth.onAuthStateChange(async (event, session) => {
     if (session && session.user) {
-      const user = await assignAvatarIfNeeded(session.user);
+      let user = session.user;
+      // 처음 로그인(소셜 포함)할 때만 커스텀 아바타 배정
+      // TOKEN_REFRESHED 등 재호출 시에는 이미 저장된 avatar_url을 그대로 사용
+      if (event === 'SIGNED_IN') {
+        user = await assignAvatarIfNeeded(session.user);
+      }
       renderMypage(user);
 
       // 로그인 후 대기 중인 항목 처리

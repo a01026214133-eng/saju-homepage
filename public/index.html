@@ -808,6 +808,32 @@
       z-index: 2;
     }
     .yeon-section .rec-section-header { padding: 0 24px; margin-bottom: 16px; }
+
+    .slider-wrap { position: relative; }
+    .slider-arrows {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      padding: 8px 20px 0;
+    }
+    .slider-arrow {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid #e0d8cc;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      color: #3a2e22;
+      transition: background 0.18s, opacity 0.18s;
+      user-select: none;
+    }
+    .slider-arrow:hover { background: #fff; }
+    .slider-arrow.disabled { opacity: 0.25; pointer-events: none; }
     .slider-outer {
       overflow: hidden;
       cursor: grab;
@@ -1049,17 +1075,21 @@
       <span class="rec-section-title">서로의 사랑을 알아보자! , 인연북</span>
       <a href="javascript:void(0)" onclick="openPage('인연복')" class="rec-section-more">전체 보기</a>
     </div>
+    <div class="slider-wrap">
     <div class="slider-outer" id="yeonOuter">
       <div class="yeon-track" id="yeonTrack">
-        <div class="yeon-card">
-          <div class="card-thumb">💑<span class="deco">❤</span></div>
+        <div class="yeon-card" onclick="window.open('https://www.obsd-reuniontest.co.kr/','_blank')" style="cursor:pointer;">
+          <div class="card-thumb">
+            💑<span class="deco">❤</span>
+            <img src="images/ch_4.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
+          </div>
           <div class="yeon-body">
             <span class="yeon-badge">재회 테스트</span>
             <div class="yeon-title">우리 다시 만날 수 있을까?<br>오복신당 재회 테스트</div>
             <div class="yeon-desc">몇가지 테스트로 재회를 확인해보자</div>
             <div class="yeon-footer">
               <span class="yeon-price">무료</span>
-              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+              <span class="yeon-heart" onclick="event.stopPropagation();toggleYeonHeart(this)">♡</span>
             </div>
           </div>
         </div>
@@ -1114,6 +1144,12 @@
       </div>
     </div>
     <div class="yeon-dots" id="yeonDots"></div>
+    <div class="slider-arrows">
+      <div class="slider-arrow disabled" id="yeonArrowLeft" onclick="slideArrow('yeonTrack','yeonDots','yeonArrowLeft','yeonArrowRight',-1)">&#8249;</div>
+      <div class="slider-arrow" id="yeonArrowRight" onclick="slideArrow('yeonTrack','yeonDots','yeonArrowLeft','yeonArrowRight',1)">&#8250;</div>
+    </div>
+
+  </div>
   </div>
 
   <!-- 재물복 슬라이더 섹션 -->
@@ -1122,6 +1158,7 @@
       <span class="rec-section-title">재물복을 알아보자! , 재물북</span>
       <a href="javascript:void(0)" onclick="openPage('재물복')" class="rec-section-more">전체 보기</a>
     </div>
+    <div class="slider-wrap">
     <div class="slider-outer" id="jaeOuter">
       <div class="yeon-track" id="jaeTrack">
         <div class="yeon-card">
@@ -1187,6 +1224,12 @@
       </div>
     </div>
     <div class="yeon-dots" id="jaeDots"></div>
+    <div class="slider-arrows">
+      <div class="slider-arrow disabled" id="jaeArrowLeft" onclick="slideArrow('jaeTrack','jaeDots','jaeArrowLeft','jaeArrowRight',-1)">&#8249;</div>
+      <div class="slider-arrow" id="jaeArrowRight" onclick="slideArrow('jaeTrack','jaeDots','jaeArrowLeft','jaeArrowRight',1)">&#8250;</div>
+    </div>
+
+  </div>
   </div>
 
   <!-- 가정복 슬라이더 섹션 -->
@@ -1195,71 +1238,54 @@
       <span class="rec-section-title">가정복을 알아보자! , 가정북</span>
       <a href="javascript:void(0)" onclick="openPage('가정복')" class="rec-section-more">전체 보기</a>
     </div>
+    <div class="slider-wrap">
     <div class="slider-outer" id="gaOuter">
       <div class="yeon-track" id="gaTrack">
-        <div class="yeon-card">
-          <div class="card-thumb">🏠<span class="deco">❤</span></div>
+        <div class="yeon-card" onclick="window.open('https://www.obsd-aistest.co.kr/', '_blank')" style="cursor:pointer;">
+          <div class="card-thumb">🏠<span class="deco">❤</span><img src="images/ch_5.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()"></div>
           <div class="yeon-body">
-            <span class="yeon-badge">가정운</span>
-            <div class="yeon-title">우리 가정의 운을<br>살펴보세요</div>
+            <span class="yeon-badge">액임살</span>
+            <div class="yeon-title">나에게도 액임살이<br>들어와 있을까?</div>
             <div class="yeon-desc">가정의 화목과 행복을 위한 사주 풀이</div>
             <div class="yeon-footer">
-              <span class="yeon-price">냥</span>
-              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+              <span class="yeon-price">무료</span>
+              <span class="yeon-heart" onclick="event.stopPropagation();toggleYeonHeart(this)">♡</span>
             </div>
           </div>
         </div>
-        <div class="yeon-card">
-          <div class="card-thumb">👶<span class="deco">✿</span></div>
+        <div class="yeon-card" onclick="window.open('https://www.imsinun.co.kr/', '_blank')" style="cursor:pointer;">
+          <div class="card-thumb">👶<span class="deco">✿</span><img src="images/ch_2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()"></div>
           <div class="yeon-body">
             <span class="yeon-badge">임신운</span>
             <div class="yeon-title">나는 언제<br>임신할까?</div>
             <div class="yeon-desc">오복할머니가 임신운을 정성껏 풀어드립니다</div>
             <div class="yeon-footer">
               <span class="yeon-price">무료</span>
-              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+              <span class="yeon-heart" onclick="event.stopPropagation();toggleYeonHeart(this)">♡</span>
             </div>
           </div>
         </div>
-        <div class="yeon-card">
-          <div class="card-thumb">👨‍👩‍👧<span class="deco">★</span></div>
+        <div class="yeon-card" onclick="window.open('https://www.jasikun.co.kr/', '_blank')" style="cursor:pointer;">
+          <div class="card-thumb">👨‍👩‍👧<span class="deco">★</span><img src="images/ch_3.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()"></div>
           <div class="yeon-body">
-            <span class="yeon-badge">자녀운</span>
+            <span class="yeon-badge">자식운</span>
             <div class="yeon-title">나는 어떤 자식과<br>인연일까?</div>
             <div class="yeon-desc">자녀의 건강과 학업, 미래를 살펴보세요</div>
             <div class="yeon-footer">
               <span class="yeon-price">39냥</span>
-              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
-            </div>
-          </div>
-        </div>
-        <div class="yeon-card">
-          <div class="card-thumb">💑<span class="deco">◇</span></div>
-          <div class="yeon-body">
-            <span class="yeon-badge">부부운</span>
-            <div class="yeon-title">부부 사이의 운을<br>살펴보세요</div>
-            <div class="yeon-desc">더 행복한 결혼 생활을 만들어 가는 방법</div>
-            <div class="yeon-footer">
-              <span class="yeon-price">냥</span>
-              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
-            </div>
-          </div>
-        </div>
-        <div class="yeon-card">
-          <div class="card-thumb">🌈<span class="deco">✦</span></div>
-          <div class="yeon-body">
-            <span class="yeon-badge">액임살</span>
-            <div class="yeon-title">나에게도 액임살이<br>들어와 있을까?</div>
-            <div class="yeon-desc">현재 들어온 액임살의 정도를 확인해드립니다</div>
-            <div class="yeon-footer">
-              <span class="yeon-price">무료</span>
-              <span class="yeon-heart" onclick="toggleYeonHeart(this)">♡</span>
+              <span class="yeon-heart" onclick="event.stopPropagation();toggleYeonHeart(this)">♡</span>
             </div>
           </div>
         </div>
       </div>
     </div>
+    </div>
     <div class="yeon-dots" id="gaDots"></div>
+    <div class="slider-arrows">
+      <div class="slider-arrow disabled" id="gaArrowLeft" onclick="slideArrow('gaTrack','gaDots','gaArrowLeft','gaArrowRight',-1)">&#8249;</div>
+      <div class="slider-arrow" id="gaArrowRight" onclick="slideArrow('gaTrack','gaDots','gaArrowLeft','gaArrowRight',1)">&#8250;</div>
+    </div>
+
   </div>
 
   <!-- 성공복 슬라이더 섹션 -->
@@ -1268,6 +1294,7 @@
       <span class="rec-section-title">성공복을 알아보자! , 성공북</span>
       <a href="javascript:void(0)" onclick="openPage('성공복')" class="rec-section-more">전체 보기</a>
     </div>
+    <div class="slider-wrap">
     <div class="slider-outer" id="seongOuter">
       <div class="yeon-track" id="seongTrack">
         <div class="yeon-card">
@@ -1333,6 +1360,12 @@
       </div>
     </div>
     <div class="yeon-dots" id="seongDots"></div>
+    <div class="slider-arrows">
+      <div class="slider-arrow disabled" id="seongArrowLeft" onclick="slideArrow('seongTrack','seongDots','seongArrowLeft','seongArrowRight',-1)">&#8249;</div>
+      <div class="slider-arrow" id="seongArrowRight" onclick="slideArrow('seongTrack','seongDots','seongArrowLeft','seongArrowRight',1)">&#8250;</div>
+    </div>
+
+  </div>
   </div>
 
   <!-- 건강복 슬라이더 섹션 -->
@@ -1341,6 +1374,7 @@
       <span class="rec-section-title">건강복을 알아보자! , 건강북</span>
       <a href="javascript:void(0)" onclick="openPage('건강복')" class="rec-section-more">전체 보기</a>
     </div>
+    <div class="slider-wrap">
     <div class="slider-outer" id="gunOuter">
       <div class="yeon-track" id="gunTrack">
         <div class="yeon-card">
@@ -1406,6 +1440,12 @@
       </div>
     </div>
     <div class="yeon-dots" id="gunDots"></div>
+    <div class="slider-arrows">
+      <div class="slider-arrow disabled" id="gunArrowLeft" onclick="slideArrow('gunTrack','gunDots','gunArrowLeft','gunArrowRight',-1)">&#8249;</div>
+      <div class="slider-arrow" id="gunArrowRight" onclick="slideArrow('gunTrack','gunDots','gunArrowLeft','gunArrowRight',1)">&#8250;</div>
+    </div>
+
+  </div>
   </div>
 
   <!-- 본문 영역 (비어있음) -->
@@ -2891,6 +2931,39 @@
     el.classList.toggle('liked');
     el.textContent = el.classList.contains('liked') ? '♥' : '♡';
   }
+
+  // 화살표 버튼 슬라이드
+  function slideArrow(trackId, dotsId, leftId, rightId, dir) {
+    const track = document.getElementById(trackId);
+    const dotsEl = document.getElementById(dotsId);
+    if (!track) return;
+    const cards = track.querySelectorAll('.yeon-card');
+    const GAP = 12;
+    const cardW = cards[0].getBoundingClientRect().width + GAP;
+    const total = cards.length;
+
+    // 현재 인덱스 파악
+    const tx = new WebKitCSSMatrix(window.getComputedStyle(track).transform).m41;
+    let cur = Math.round(-tx / cardW);
+    cur = Math.max(0, Math.min(cur + dir, total - 1));
+
+    track.style.transition = 'transform 0.32s cubic-bezier(.25,.46,.45,.94)';
+    track.style.transform = 'translateX(-' + (cur * cardW) + 'px)';
+
+    if (dotsEl) dotsEl.querySelectorAll('div').forEach((d, i) => d.classList.toggle('active', i === cur));
+
+    // 화살표 활성/비활성
+    const lBtn = document.getElementById(leftId);
+    const rBtn = document.getElementById(rightId);
+    if (lBtn) lBtn.classList.toggle('disabled', cur === 0);
+    if (rBtn) rBtn.classList.toggle('disabled', cur === total - 1);
+  }
+
+  // 초기 왼쪽 화살표 비활성화
+  ['yeon','jae','ga','seong','gun'].forEach(function(p) {
+    var l = document.getElementById(p + 'ArrowLeft');
+    if (l) l.classList.add('disabled');
+  });
 </script>
 </body>
 </html>

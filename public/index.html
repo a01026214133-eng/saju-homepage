@@ -930,9 +930,9 @@
   <section class="slider-section" id="sliderSection">
     <div class="slider-wrapper">
       <div class="slider-track" id="sliderTrack">
-        <div class="slide"><img class="slide-img" src="images/image_16.png" alt="액임살 테스트"></div>
-        <div class="slide"><img class="slide-img" src="images/image_11.png" alt="임신운"></div>
-        <div class="slide"><img class="slide-img" src="images/image_12.png" alt="자식운"></div>
+        <div class="slide" style="cursor:pointer;" onclick="window.open('https://www.obsd-aistest.co.kr/', '_blank')"><img class="slide-img" src="images/image_16.png" alt="액임살 테스트"></div>
+        <div class="slide" style="cursor:pointer;" onclick="window.open('https://www.imsinun.co.kr/', '_blank')"><img class="slide-img" src="images/image_11.png" alt="임신운"></div>
+        <div class="slide" style="cursor:pointer;" onclick="window.open('https://www.jasikun.co.kr/', '_blank')"><img class="slide-img" src="images/image_12.png" alt="자식운"></div>
       </div>
       <button class="slider-btn prev" id="prevBtn">&#10094;</button>
       <button class="slider-btn next" id="nextBtn">&#10095;</button>
@@ -2533,6 +2533,8 @@
     var slides = track.querySelectorAll('.slide');
     var dots = document.getElementById('sliderDots');
     var cur = 0, total = slides.length, timer;
+    var dragStartX = 0, isDragging = false, hasDragged = false;
+
     slides.forEach(function(_, i) {
       var d = document.createElement('div');
       d.className = 'slider-dot' + (i===0?' active':'');
@@ -2547,6 +2549,22 @@
     document.getElementById('prevBtn').onclick = function() { go(cur-1); reset(); };
     document.getElementById('nextBtn').onclick = function() { go(cur+1); reset(); };
     function reset() { clearInterval(timer); timer = setInterval(function(){ go(cur+1); }, 3500); }
+
+    // 드래그와 클릭 구분: 5px 이상 움직이면 드래그로 간주
+    var wrapper = document.querySelector('.slider-wrapper');
+    wrapper.addEventListener('mousedown', function(e) { dragStartX = e.clientX; isDragging = true; hasDragged = false; });
+    window.addEventListener('mousemove', function(e) { if (isDragging && Math.abs(e.clientX - dragStartX) > 5) hasDragged = true; });
+    window.addEventListener('mouseup', function() { isDragging = false; });
+    wrapper.addEventListener('touchstart', function(e) { dragStartX = e.touches[0].clientX; hasDragged = false; }, { passive: true });
+    wrapper.addEventListener('touchmove', function(e) { if (Math.abs(e.touches[0].clientX - dragStartX) > 5) hasDragged = true; }, { passive: true });
+
+    // 슬라이드 클릭: 드래그가 아닐 때만 링크 실행
+    slides.forEach(function(slide) {
+      slide.addEventListener('click', function(e) {
+        if (hasDragged) { e.preventDefault(); e.stopPropagation(); hasDragged = false; }
+      });
+    });
+
     reset();
   })();
 

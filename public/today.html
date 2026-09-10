@@ -512,6 +512,9 @@ async function getFortune(){
       body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
     });
     const data = await res.json();
+    if(!res.ok || data.error) {
+      throw new Error('API 오류 ' + res.status + ': ' + JSON.stringify(data.error || data));
+    }
     const raw = data.content.map(b=>b.text||'').join('');
     const f = JSON.parse(raw.replace(/```json|```/g,'').trim());
     clearInterval(msgTimer);
@@ -519,7 +522,7 @@ async function getFortune(){
   } catch(e) {
     clearInterval(msgTimer);
     showPage('pgInput');
-    alert('운세를 불러오는 중 문제가 생겼어요. 다시 시도해주세요.');
+    alert('오류: ' + (e && e.message ? e.message : JSON.stringify(e)));
   }
 }
 

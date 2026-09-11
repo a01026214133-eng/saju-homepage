@@ -397,10 +397,6 @@ body{font-family:'Noto Sans KR',sans-serif;background:#0b0a14;overflow-x:hidden}
 
 </div>
 <script>
-  const ANTHROPIC_API_KEY = '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';
-</script>
-<script>
-const API_KEY = (typeof ANTHROPIC_API_KEY !== 'undefined') ? ANTHROPIC_API_KEY : '';
 
 const today = new Date();
 
@@ -501,21 +497,16 @@ async function getFortune(){
 {"score":숫자(55~95),"level":"대길|중길|소길|평운|주의 중 하나","overall":"오늘 전체 흐름 2~3문장","bok":"가정복|인연복|재물복|성공복|건강복","bok_desc":"오늘의 복 설명 2문장","gwiin_direction":"방향","gwiin_type":"어떤 사람","gwiin_desc":"귀인 설명 2문장","cautions":["주의1","주의2","주의3"],"lucky_color":"색","lucky_number":"숫자","lucky_direction":"방향","actions":["행동1","행동2","행동3"],"grandma_quote":"따뜻하고 기억에 남는 짧은 한마디"}`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch('/api/today-fortune',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': API_KEY,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt})
     });
     const data = await res.json();
     if(!res.ok || data.error) {
       throw new Error('API 오류 ' + res.status + ': ' + JSON.stringify(data.error || data));
     }
-    const raw = data.content.map(b=>b.text||'').join('');
+    const raw = data.text;
     const f = JSON.parse(raw.replace(/```json|```/g,'').trim());
     clearInterval(msgTimer);
     renderResult(f);

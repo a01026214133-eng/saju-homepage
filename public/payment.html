@@ -411,11 +411,9 @@
 
   <script>
     var selectedCoinEl = null;
-    
     var selectedPrice = 0;
     var selectedBase = 0;
     var selectedBonus = 0;
-    
 
     function selectCoin(el, price, base, bonus) {
       document.querySelectorAll('.coin-card').forEach(function(c) {
@@ -429,7 +427,14 @@
       updateSummary();
     }
 
-    
+    function updateSummary() {
+      var btn = document.getElementById('payNowBtn');
+      if (selectedCoinEl) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    }
 
     async function doPayment() {
       if (!selectedCoinEl) {
@@ -446,8 +451,8 @@
       await widgets.requestPayment({
         orderId: window.btoa(Math.random()).slice(0, 20),
         orderName: "엽전 " + selectedBase + "냥 충전",
-        successUrl: window.location.origin + "/success?coins=" + (selectedBase + selectedBonus),
-        failUrl: window.location.origin + "/fail",
+        successUrl: "https://www.obsd.co.kr/success?coins=" + (selectedBase + selectedBonus),
+        failUrl: "https://www.obsd.co.kr/fail",
         customerName: "구매자",
       });
     }

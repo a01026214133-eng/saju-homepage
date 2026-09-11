@@ -1,6 +1,8 @@
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
+  console.log('KEY:', process.env.ANTHROPIC_API_KEY?.slice(0, 15));
+
   const { prompt } = req.body;
 
   try {

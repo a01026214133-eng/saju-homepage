@@ -1,86 +1,277 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="https://static.toss.im/icons/png/4x/icon-toss-logo.png" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>토스페이먼츠 샘플 프로젝트</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>충전 완료 - 오복신당</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      background-color: #EDE9DF;
+      background-image:
+        repeating-linear-gradient(45deg, rgba(180,160,130,0.07) 0px, rgba(180,160,130,0.07) 1px, transparent 1px, transparent 20px),
+        repeating-linear-gradient(-45deg, rgba(180,160,130,0.07) 0px, rgba(180,160,130,0.07) 1px, transparent 1px, transparent 20px);
+      font-family: 'Noto Serif KR', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
 
-  <body>
-    <div class="box_section" style="width: 600px">
-      <img width="100px" src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" />
-      <h2>결제를 완료했어요</h2>
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      overflow: hidden;
+      animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.88); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
 
-      <div class="p-grid typography--p" style="margin-top: 50px">
-        <div class="p-grid-col text--left"><b>결제금액</b></div>
-        <div class="p-grid-col text--right" id="amount"></div>
-      </div>
-      <div class="p-grid typography--p" style="margin-top: 10px">
-        <div class="p-grid-col text--left"><b>주문번호</b></div>
-        <div class="p-grid-col text--right" id="orderId"></div>
-      </div>
-      <div class="p-grid typography--p" style="margin-top: 10px">
-        <div class="p-grid-col text--left"><b>paymentKey</b></div>
-        <div class="p-grid-col text--right" id="paymentKey" style="white-space: initial; width: 250px"></div>
-      </div>
-      <div class="p-grid" style="margin-top: 30px">
-        <button class="button p-grid-col5" onclick="location.href='https://docs.tosspayments.com/guides/v2/payment-widget/integration';">연동 문서</button>
-        <button class="button p-grid-col5" onclick="location.href='https://discord.gg/A4fRFXQhRu';" style="background-color: #e8f3ff; color: #1b64da">실시간 문의</button>
-      </div>
-    </div>
+    /* 상태별 헤더 */
+    .card-header {
+      padding: 36px 24px 28px;
+      text-align: center;
+      background: #1a1209;
+    }
+    .card-header.success { background: #1a1209; }
+    .card-header.fail    { background: #5a1010; }
+    .card-header.loading { background: #2a2218; }
 
-    <div class="box_section" style="width: 600px; text-align: left">
-      <b>Response Data :</b>
-      <div id="response" style="white-space: initial"></div>
-    </div>
+    .status-icon { font-size: 52px; margin-bottom: 14px; }
+    .status-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #c8b89a;
+      letter-spacing: 0.06em;
+    }
+    .status-sub {
+      font-size: 12px;
+      color: #7a6a58;
+      margin-top: 6px;
+      letter-spacing: 0.04em;
+    }
 
-    <script>
-      // 쿼리 파라미터 값이 결제 요청할 때 보낸 데이터와 동일한지 반드시 확인하세요.
-      // 클라이언트에서 결제 금액을 조작하는 행위를 방지할 수 있습니다.
-      const urlParams = new URLSearchParams(window.location.search);
+    /* 내용 */
+    .card-body { padding: 24px; }
 
-      // 서버로 결제 승인에 필요한 결제 정보를 보내세요.
-      async function confirm() {
-        var requestData = {
-          paymentKey: urlParams.get("paymentKey"),
-          orderId: urlParams.get("orderId"),
-          amount: urlParams.get("amount"),
-        };
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid #f0ebe3;
+      font-size: 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #a09070; font-size: 12px; }
+    .info-value { color: #2a1f14; font-weight: 600; }
+    .info-value.highlight { color: #c8b89a; font-size: 18px; }
 
-        const response = await fetch("/confirm", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestData),
-        });
+    /* 버튼 */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-top: 10px;
+    }
+    .btn-primary {
+      background: #1a1209;
+      color: #c8b89a;
+    }
+    .btn-primary:hover { background: #3a2e22; }
+    .btn-secondary {
+      background: #f0ebe3;
+      color: #7a6a5a;
+    }
+    .btn-secondary:hover { background: #e0d8cc; }
 
-        const json = await response.json();
+    /* 스피너 */
+    .spinner-wrap {
+      display: flex;
+      justify-content: center;
+      padding: 32px 0;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid #e0d8cc;
+      border-top-color: #c8b89a;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
 
-        if (!response.ok) {
-          // TODO: 결제 실패 비즈니스 로직을 구현하세요.
-          console.log(json);
-          window.location.href = `/fail?message=${json.message}&code=${json.code}`;
-        }
+<div class="card" id="card">
+  <!-- 로딩 -->
+  <div class="card-header loading" id="headerEl">
+    <div class="status-icon">⏳</div>
+    <div class="status-title">결제 확인 중...</div>
+    <div class="status-sub">잠시만 기다려주세요</div>
+  </div>
+  <div class="card-body">
+    <div class="spinner-wrap"><div class="spinner"></div></div>
+  </div>
+</div>
 
-        // TODO: 결제 성공 비즈니스 로직을 구현하세요.
-        // console.log(json);
-        return json;
-      }
-      confirm().then(function (data) {
-        document.getElementById("response").innerHTML = `<pre>${JSON.stringify(data, null, 4)}</pre>`;
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://ucdnplzmfnnnkgqistbs.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_OQ9jEJd3gFievOWIJSU6YA_Gn2i2qee';
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // 토스페이먼츠 테스트 시크릿 키 (테스트용 — 실제 운영 시 서버로 이동)
+  const TOSS_SECRET_KEY = 'test_sk_zXLkKEypNArWmo50nX3lmeaxYG5R';
+
+  const params = new URLSearchParams(window.location.search);
+  const paymentKey = params.get('paymentKey');
+  const orderId    = params.get('orderId');
+  const amount     = Number(params.get('amount'));
+  const coins      = Number(params.get('coins')); // payment.html에서 넘긴 냥이 수
+
+  async function run() {
+    // ① 로그인 확인
+    const { data: { session } } = await _supabase.auth.getSession();
+    if (!session) {
+      showFail('로그인이 필요해요', '결제 정보를 저장하려면 로그인해야 합니다.');
+      return;
+    }
+    const userId = session.user.id;
+
+    // ② 토스 결제 승인 (테스트 환경 — 클라이언트 직접 호출)
+    let tossData;
+    try {
+      const encoded = btoa(TOSS_SECRET_KEY + ':');
+      const res = await fetch('https://api.tosspayments.com/v1/payments/confirm', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${encoded}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ paymentKey, orderId, amount }),
       });
+      tossData = await res.json();
+      if (!res.ok) throw new Error(tossData.message || '결제 승인 실패');
+    } catch (e) {
+      showFail('결제 승인 실패', e.message);
+      return;
+    }
 
-      const paymentKeyElement = document.getElementById("paymentKey");
-      const orderIdElement = document.getElementById("orderId");
-      const amountElement = document.getElementById("amount");
+    // ③ Supabase wallets 잔액 업데이트 (upsert)
+    const { data: wallet, error: walletErr } = await _supabase
+      .from('wallets')
+      .upsert({ user_id: userId, balance: coins }, { onConflict: 'user_id', ignoreDuplicates: false })
+      .select()
+      .single();
 
-      orderIdElement.textContent = urlParams.get("orderId");
-      amountElement.textContent = urlParams.get("amount") + "원";
-      paymentKeyElement.textContent = urlParams.get("paymentKey");
-    </script>
-  </body>
+    // upsert가 insert인 경우 balance = coins,
+    // 이미 있을 경우 RPC로 증가 처리
+    let finalBalance = coins;
+    if (walletErr && walletErr.code !== '23505') {
+      // 이미 존재 → balance 증가
+      const { data: updated } = await _supabase.rpc('increment_balance', {
+        p_user_id: userId,
+        p_amount: coins,
+      });
+      finalBalance = updated ?? coins;
+    } else if (wallet) {
+      finalBalance = wallet.balance;
+    }
+
+    // ④ 잔액 증가 (wallet이 이미 있는 경우 UPDATE)
+    await _supabase
+      .from('wallets')
+      .update({ balance: finalBalance + coins })
+      .eq('user_id', userId)
+      .eq('balance', finalBalance - coins); // 아직 증가 안 됐을 때만
+
+    // 간단하게 재시도: 현재 잔액 조회 후 직접 증가
+    const { data: currentWallet } = await _supabase
+      .from('wallets')
+      .select('balance')
+      .eq('user_id', userId)
+      .single();
+
+    const newBalance = (currentWallet?.balance ?? 0) + coins;
+
+    await _supabase
+      .from('wallets')
+      .upsert({ user_id: userId, balance: newBalance }, { onConflict: 'user_id' });
+
+    // ⑤ 충전 내역 기록
+    await _supabase.from('charge_history').insert({
+      user_id: userId,
+      type: 'charge',
+      amount: coins,
+      balance_after: newBalance,
+      label: `냥이 ${coins.toLocaleString()}냥 충전`,
+      payment_key: paymentKey,
+      order_id: orderId,
+    });
+
+    // ⑥ 성공 화면
+    showSuccess(coins, amount, newBalance, orderId);
+  }
+
+  function showSuccess(coins, amount, balance, orderId) {
+    document.getElementById('headerEl').className = 'card-header success';
+    document.getElementById('headerEl').innerHTML = `
+      <div class="status-icon">🎉</div>
+      <div class="status-title">충전 완료!</div>
+      <div class="status-sub">${coins.toLocaleString()}냥이 충전되었어요</div>
+    `;
+    document.querySelector('.card-body').innerHTML = `
+      <div class="info-row">
+        <span class="info-label">충전 냥이</span>
+        <span class="info-value highlight">+${coins.toLocaleString()} 냥</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">결제 금액</span>
+        <span class="info-value">${amount.toLocaleString()}원</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">현재 보유 냥이</span>
+        <span class="info-value">${balance.toLocaleString()} 냥</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">주문번호</span>
+        <span class="info-value" style="font-size:11px;color:#b0a090;">${orderId}</span>
+      </div>
+      <button class="btn btn-primary" onclick="location.href='charge-history.html'">충전 내역 보기</button>
+      <button class="btn btn-secondary" onclick="location.href='index.html'">홈으로 돌아가기</button>
+    `;
+  }
+
+  function showFail(title, msg) {
+    document.getElementById('headerEl').className = 'card-header fail';
+    document.getElementById('headerEl').innerHTML = `
+      <div class="status-icon">😢</div>
+      <div class="status-title">${title}</div>
+      <div class="status-sub">${msg}</div>
+    `;
+    document.querySelector('.card-body').innerHTML = `
+      <button class="btn btn-primary" onclick="history.back()">다시 시도</button>
+      <button class="btn btn-secondary" onclick="location.href='index.html'">홈으로 돌아가기</button>
+    `;
+  }
+
+  run();
+</script>
+</body>
 </html>

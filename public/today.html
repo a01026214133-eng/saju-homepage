@@ -505,7 +505,7 @@ let curBok = '';
 
 function formatText(str) {
   if(!str) return '';
-  return String(str).trim().replace(/\./g,'.<br>').replace(/\n/g,'<br>').replace(/(<br>){2,}/g,'<br>');
+  return String(str).trim().replace(/[.,]/g,'$&<br>').replace(/\n/g,'<br>').replace(/(<br>){2,}/g,'<br>');
 }
 
 function renderResult(f){

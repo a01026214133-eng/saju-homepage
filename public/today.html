@@ -522,9 +522,7 @@ function renderResult(f){
   document.getElementById('rActions').innerHTML = f.actions.map((a,i)=>`<div class="act-item"><div class="act-n">${i+1}</div><div class="act-t">${a}</div></div>`).join('');
   document.getElementById('rGmQuote').innerHTML = formatText('"' + f.grandma_quote + '"');
 
-  document.getElementById('rRelTitle').textContent = `오늘 가장 강한 복이 ${f.bok}이에요`;
-  document.getElementById('rRelSub').textContent = b.desc;
-  document.getElementById('rRelBtn').textContent = b.emoji + ' ' + b.test + ' 바로 보기';
+
 
   showPage('pgResult');
 }

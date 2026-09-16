@@ -1010,9 +1010,9 @@
   <section class="slider-section" id="sliderSection">
     <div class="slider-wrapper">
       <div class="slider-track" id="sliderTrack">
-        <div class="slide" style="cursor:pointer;" onclick="window.open('https://www.obsd-aistest.co.kr/', '_blank')"><img class="slide-img" src="images/image_16.png" alt="액임살 테스트"></div>
-        <div class="slide" style="cursor:pointer;" onclick="window.open('https://www.imsinun.co.kr/', '_blank')"><img class="slide-img" src="images/image_11.png" alt="임신운"></div>
-        <div class="slide" style="cursor:pointer;" onclick="window.open('https://www.jasikun.co.kr/', '_blank')"><img class="slide-img" src="images/image_12.png" alt="자식운"></div>
+        <div class="slide" style="cursor:pointer;" onclick="openAuthLink('https://www.obsd-aistest.co.kr/')"><img class="slide-img" src="images/image_16.png" alt="액임살 테스트"></div>
+        <div class="slide" style="cursor:pointer;" onclick="openAuthLink('https://www.imsinun.co.kr/')"><img class="slide-img" src="images/image_11.png" alt="임신운"></div>
+        <div class="slide" style="cursor:pointer;" onclick="openAuthLink('https://www.jasikun.co.kr/')"><img class="slide-img" src="images/image_12.png" alt="자식운"></div>
       </div>
       <button class="slider-btn prev" id="prevBtn">&#10094;</button>
       <button class="slider-btn next" id="nextBtn">&#10095;</button>
@@ -1078,7 +1078,7 @@
     </div>
     <div class="slider-outer" id="recOuter">
       <div class="rec-track" id="recTrack">
-        <a class="recommend-card" href="https://www.obsd-iljutest.co.kr/" target="_blank" style="text-decoration:none;color:inherit;display:block;">
+        <a class="recommend-card" href="javascript:void(0)" onclick="openAuthLink('https://www.obsd-iljutest.co.kr/')" style="text-decoration:none;color:inherit;display:block;">
           <div class="thumb" style="padding:0;background:#1a1209;">
             <img src="images/ch_1.png" alt="오복신당 일주 확인" style="width:100%;height:100%;object-fit:cover;display:block;">
           </div>
@@ -1088,7 +1088,7 @@
             <div class="rec-sub">무료</div>
           </div>
         </a>
-        <a class="recommend-card" href="https://www.obsd-reuniontest.co.kr/" target="_blank" style="text-decoration:none;color:inherit;display:block;">
+        <a class="recommend-card" href="javascript:void(0)" onclick="openAuthLink('https://www.obsd-reuniontest.co.kr/')" style="text-decoration:none;color:inherit;display:block;">
           <div class="thumb" style="padding:0;background:#1a1209;">
             <img src="images/ch_4.png" alt="재회 테스트" style="width:100%;height:100%;object-fit:cover;display:block;">
           </div>
@@ -1098,7 +1098,7 @@
             <div class="rec-sub">무료</div>
           </div>
         </a>
-        <a class="recommend-card" href="https://www.obsd-aistest.co.kr/" target="_blank" style="text-decoration:none;color:inherit;display:block;">
+        <a class="recommend-card" href="javascript:void(0)" onclick="openAuthLink('https://www.obsd-aistest.co.kr/')" style="text-decoration:none;color:inherit;display:block;">
           <div class="thumb" style="padding:0;background:#1a1209;">
             <img src="images/ch_5.png" alt="액임살 테스트" style="width:100%;height:100%;object-fit:cover;display:block;">
           </div>
@@ -1108,7 +1108,7 @@
             <div class="rec-sub">무료</div>
           </div>
         </a>
-        <a class="recommend-card" href="https://www.obsd.co.kr/today" target="_blank" style="text-decoration:none;color:inherit;display:block;">
+        <a class="recommend-card" href="javascript:void(0)" onclick="openAuthLink('https://www.obsd.co.kr/today')" style="text-decoration:none;color:inherit;display:block;">
           <div class="thumb" style="padding:0;background:#1a1209;">
             <img src="images/ch_6.png" alt="오늘의 운세" style="width:100%;height:100%;object-fit:cover;display:block;">
           </div>
@@ -1132,7 +1132,7 @@
     <div class="slider-wrap">
     <div class="slider-outer" id="yeonOuter">
       <div class="yeon-track" id="yeonTrack">
-        <div class="yeon-card" onclick="window.open('https://www.obsd-reuniontest.co.kr/','_blank')" style="cursor:pointer;">
+        <div class="yeon-card" onclick="openAuthLink('https://www.obsd-reuniontest.co.kr/')" style="cursor:pointer;">
           <div class="card-thumb">
             💑<span class="deco">❤</span>
             <img src="images/ch_4.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()">
@@ -1304,7 +1304,7 @@
     <div class="slider-wrap">
     <div class="slider-outer" id="gaOuter">
       <div class="yeon-track" id="gaTrack">
-        <div class="yeon-card" onclick="window.open('https://www.obsd-aistest.co.kr/', '_blank')" style="cursor:pointer;">
+        <div class="yeon-card" onclick="openAuthLink('https://www.obsd-aistest.co.kr/')" style="cursor:pointer;">
           <div class="card-thumb">🏠<span class="deco">❤</span><img src="images/ch_5.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()"></div>
           <div class="yeon-body">
             <span class="yeon-badge">액임살</span>
@@ -1316,7 +1316,7 @@
             </div>
           </div>
         </div>
-        <div class="yeon-card" onclick="window.open('https://www.imsinun.co.kr/', '_blank')" style="cursor:pointer;">
+        <div class="yeon-card" onclick="openAuthLink('https://www.imsinun.co.kr/')" style="cursor:pointer;">
           <div class="card-thumb">👶<span class="deco">✿</span><img src="images/ch_2.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()"></div>
           <div class="yeon-body">
             <span class="yeon-badge">임신운</span>
@@ -1328,7 +1328,7 @@
             </div>
           </div>
         </div>
-        <div class="yeon-card" onclick="window.open('https://www.jasikun.co.kr/', '_blank')" style="cursor:pointer;">
+        <div class="yeon-card" onclick="openAuthLink('https://www.jasikun.co.kr/')" style="cursor:pointer;">
           <div class="card-thumb">👨‍👩‍👧<span class="deco">★</span><img src="images/ch_3.png" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" onerror="this.remove()"></div>
           <div class="yeon-body">
             <span class="yeon-badge">자식운</span>
@@ -2197,7 +2197,7 @@
   <div class="login-required-box">
     <div class="login-required-icon">🔮</div>
     <div class="login-required-title">로그인이 필요해요</div>
-    <div class="login-required-desc">카드뉴스를 보려면<br>먼저 로그인해 주세요.</div>
+    <div class="login-required-desc">해당 서비스를 이용하려면<br>먼저 로그인해 주세요.</div>
     <button class="login-required-btn primary" onclick="goToLogin()">로그인 하기</button>
     <button class="login-required-btn secondary" onclick="closeLoginRequiredModal()">나중에 할게요</button>
   </div>

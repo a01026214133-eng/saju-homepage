@@ -1569,7 +1569,7 @@
       </div>
     </div>
     </a>
-    <a href="today.html" style="text-decoration:none; color:inherit; display:block;">
+    <a href="javascript:void(0)" onclick="openAuthLink('today.html')" style="text-decoration:none; color:inherit; display:block;">
     <div class="card-item">
 <div class="card-img" style="padding:0; overflow:hidden;"><img src="images/image_10.png" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
       <div class="card-body">
@@ -2412,7 +2412,8 @@
           closePanel();
           setTimeout(function() {
             if (pendingUrl) {
-              window.open(pendingUrl, '_blank');
+              var isExt = /^https?:\/\//i.test(pendingUrl);
+              if (isExt) { window.open(pendingUrl, '_blank'); } else { window.location.href = pendingUrl; }
               modal.dataset.pendingUrl = '';
             } else if (pendingId) {
               _doOpenPage(pendingId);
@@ -2741,7 +2742,13 @@
       showLoginRequiredModal('');
       return;
     }
-    window.open(url, '_blank');
+    // 내부 페이지(상대경로)는 같은 탭, 외부 URL은 새 탭
+    var isExternal = /^https?:\/\//i.test(url);
+    if (isExternal) {
+      window.open(url, '_blank');
+    } else {
+      window.location.href = url;
+    }
   }
 
   // 로그인 필요 모달 표시
